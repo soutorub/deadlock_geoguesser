@@ -10,27 +10,30 @@
 	let password = '';
 	let username = '';
 	let message = '';
+	let submitting = false;
 
 	$: if (browser && $activeUser) {
 		goto('/app');
 	}
 
-	function handleSubmit() {
+	async function handleSubmit() {
+		submitting = true;
 		const result =
 			mode === 'login'
-				? appStore.login(email, password)
-				: appStore.signup(email, password, username.trim());
+				? await appStore.login(email, password)
+				: await appStore.signup(email, password, username.trim());
 
 		message = result.message;
+		submitting = false;
 
 		if (result.success) {
 			goto('/app');
 		}
 	}
 
-	function handleFormSubmit(event: SubmitEvent) {
+	async function handleFormSubmit(event: SubmitEvent) {
 		event.preventDefault();
-		handleSubmit();
+		await handleSubmit();
 	}
 </script>
 
@@ -124,7 +127,7 @@
 							<input id="auth-password" class="form-control" bind:value={password} type="password" minlength="6" placeholder="mindestens 6 Zeichen" required />
 						</div>
 
-						<button class="btn btn-success" type="submit">
+						<button class="btn btn-success" type="submit" disabled={submitting}>
 							{mode === 'login' ? 'Einloggen' : 'Account erstellen'}
 						</button>
 

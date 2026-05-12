@@ -13,6 +13,7 @@
 	let remainingSeconds = 0;
 	let timerHandle: ReturnType<typeof setInterval> | null = null;
 	let seenRoundIndex = -1;
+	let saveError = '';
 
 	function syncTimer() {
 		if (!$currentGame || $currentGame.status !== 'playing') {
@@ -34,7 +35,7 @@
 			syncTimer();
 
 			if (remainingSeconds === 0 && $currentGame?.status === 'playing') {
-				submitGuess();
+				void submitGuess();
 			}
 		}, 250);
 	}
@@ -62,9 +63,10 @@
 		}
 	}
 
-	function submitGuess() {
-		const result = appStore.submitGuess(selectedGuess);
+	async function submitGuess() {
+		const result = await appStore.submitGuess(selectedGuess);
 		selectedGuess = null;
+		saveError = result.error ?? '';
 
 		if (result.finished) {
 			if (timerHandle) {
@@ -141,8 +143,8 @@
 						</div>
 
 						<div class="d-grid gap-2 mt-auto pt-3">
-							<button class="btn btn-success" type="button" onclick={submitGuess}>Guess bestaetigen</button>
-							<button class="btn btn-outline-success" type="button" onclick={() => submitGuess()}>
+							<button class="btn btn-success" type="button" onclick={() => void submitGuess()}>Guess bestaetigen</button>
+							<button class="btn btn-outline-success" type="button" onclick={() => void submitGuess()}>
 								Ueberspringen
 							</button>
 						</div>
@@ -159,6 +161,9 @@
 					Deine Scores wurden gespeichert und fliessen jetzt sowohl ins Profil als auch in die
 					Highscore-Ansicht ein.
 				</p>
+				{#if saveError}
+					<div class="alert alert-warning py-2">{saveError}</div>
+				{/if}
 
 				<div class="row g-3 my-1">
 				{#each $currentGame.results as result, index}

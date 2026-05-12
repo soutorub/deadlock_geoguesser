@@ -8,12 +8,15 @@
 
 	let roundCount: RoundCount = 5;
 	let timerSeconds: TimerSeconds = 10;
+	let starting = false;
 
 	const roundOptions: RoundCount[] = [5, 10, 20, 30];
 	const timerOptions: TimerSeconds[] = [10, 30, 60];
 
-	function startGame() {
-		appStore.startGame({ roundCount, timerSeconds });
+	async function startGame() {
+		starting = true;
+		await appStore.startGame({ roundCount, timerSeconds });
+		starting = false;
 		goto('/app/game');
 	}
 </script>
@@ -129,7 +132,7 @@
 					</div>
 				</div>
 
-				<button class="btn btn-success w-100" type="button" onclick={startGame}>Spiel starten</button>
+				<button class="btn btn-success w-100" type="button" onclick={startGame} disabled={starting}>Spiel starten</button>
 
 				{#if $currentGame}
 					<a class="btn btn-outline-success w-100 mt-2" href="/app/game">Laufendes Spiel fortsetzen</a>

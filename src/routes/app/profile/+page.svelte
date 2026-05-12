@@ -1,9 +1,8 @@
 <svelte:options runes={false} />
 
 <script lang="ts">
-	import { activeUser, appStore } from '$lib/stores/app-store';
+	import { activeUser, appStore, profileScores } from '$lib/stores/app-store';
 	import { derived } from 'svelte/store';
-	import { appStore as stateStore } from '$lib/stores/app-store';
 
 	let editing = false;
 	let username = '';
@@ -11,6 +10,7 @@
 	let bio = '';
 	let selectedRoundCount = 'all';
 	let selectedTimer = 'all';
+	let saveMessage = '';
 
 	$: if ($activeUser && !editing) {
 		username = $activeUser.username;
@@ -25,14 +25,14 @@
 		return timer === 60 ? '1 min' : `${timer} sek`;
 	}
 
-	const profileScores = derived([stateStore, activeUser], ([$store, $activeUser]) => {
+	const orderedProfileScores = derived([profileScores, activeUser], ([$profileScores, $activeUser]) => {
 		if (!$activeUser) {
 			return [];
 		}
 
-		return $store.scores
-			.filter((score) => score.userId === $activeUser.id)
-			.sort((left, right) => new Date(right.playedAt).getTime() - new Date(left.playedAt).getTime());
+		return [...$profileScores].sort(
+			(left, right) => new Date(right.playedAt).getTime() - new Date(left.playedAt).getTime()
+		);
 	});
 
 	$: filteredStats = roundCounts.flatMap((count) =>
@@ -47,7 +47,7 @@
 			}))
 	);
 
-	$: filteredScores = $profileScores.filter((score) => {
+	$: filteredScores = $orderedProfileScores.filter((score) => {
 		const roundMatches = selectedRoundCount === 'all' || score.roundCount === Number(selectedRoundCount);
 		const timerMatches = selectedTimer === 'all' || score.timerSeconds === Number(selectedTimer);
 		return roundMatches && timerMatches;
@@ -58,10 +58,14 @@
 		selectedTimer === 'all' ? 'alle Timer' : `${labelForTimer(Number(selectedTimer))}`
 	].join(' · ');
 
-	function saveProfile(event: SubmitEvent) {
+	async function saveProfile(event: SubmitEvent) {
 		event.preventDefault();
-		appStore.updateProfile({ username, email, bio });
-		editing = false;
+		const result = await appStore.updateProfile({ username, email, bio });
+		saveMessage = result.message;
+
+		if (result.success) {
+			editing = false;
+		}
 	}
 </script>
 
@@ -104,6 +108,10 @@
 							</div>
 							<button class="btn btn-outline-success" type="submit">Speichern</button>
 						</form>
+					{/if}
+
+					{#if saveMessage}
+						<div class="alert alert-success py-2 mt-3 mb-0">{saveMessage}</div>
 					{/if}
 				</div>
 			</section>

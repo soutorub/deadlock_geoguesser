@@ -1,0 +1,29 @@
+import { json } from '@sveltejs/kit';
+import { buildBootstrap, createScore } from '$lib/server/db';
+
+export async function POST({ request }) {
+	const { userId, modeKey, roundCount, timerSeconds, rounds } = await request.json();
+
+	if (!userId || !modeKey || !roundCount || !timerSeconds || !Array.isArray(rounds)) {
+		return json({ message: 'Unvollstaendige Score-Daten.' }, { status: 400 });
+	}
+
+	try {
+		const score = await createScore({
+			userId: String(userId),
+			modeKey: String(modeKey),
+			roundCount: Number(roundCount),
+			timerSeconds: Number(timerSeconds),
+			rounds
+		});
+		const bootstrap = await buildBootstrap(String(userId));
+
+		return json({
+			score,
+			...bootstrap
+		});
+	} catch (error) {
+		console.error('Score save failed:', error);
+		return json({ message: 'Score konnte nicht gespeichert werden.' }, { status: 500 });
+	}
+}

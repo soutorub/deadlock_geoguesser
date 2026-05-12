@@ -10,8 +10,10 @@
 	let ready = false;
 
 	onMount(() => {
-		appStore.init();
-		ready = true;
+		(async () => {
+			await appStore.init();
+			ready = true;
+		})();
 	});
 
 	$: if (browser && ready && $isAuthenticated === false) {

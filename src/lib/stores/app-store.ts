@@ -1,89 +1,29 @@
 import { browser } from '$app/environment';
 import { goto } from '$app/navigation';
 import { derived, writable } from 'svelte/store';
-import { roundImages, starterScores, starterUsers } from '$lib/data';
 import type {
 	AppState,
 	GameMode,
-	ModeStats,
 	Point,
+	RoundImage,
 	RoundResult,
 	ScoreEntry,
 	UserRecord
 } from '$lib/types';
 
-const STORAGE_KEY = 'deadlock-geoguesser-prototype';
+const STORAGE_KEY = 'deadlock-geoguesser-active-user';
 const MAP_SIZE = 100;
 const MAP_DIAGONAL = Math.hypot(MAP_SIZE, MAP_SIZE);
 
 const defaultState: AppState = {
-	users: starterUsers,
-	scores: starterScores,
-	activeUserId: null,
+	currentUser: null,
+	profileScores: [],
+	leaderboardScores: [],
 	currentGame: null
 };
 
 function modeKey(roundCount: number, timerSeconds: number) {
 	return `${roundCount}-${timerSeconds}`;
-}
-
-function createEmptyStats(): ModeStats {
-	return {
-		bestScore: 0,
-		lastScore: 0,
-		averageScore: 0,
-		gamesPlayed: 0,
-		lastPlayedAt: null
-	};
-}
-
-function buildAllModeStats() {
-	const rounds = [5, 10, 20, 30];
-	const timers = [10, 30, 60];
-
-	return Object.fromEntries(
-		rounds.flatMap((roundCount) =>
-			timers.map((timerSeconds) => [modeKey(roundCount, timerSeconds), createEmptyStats()])
-		)
-	);
-}
-
-function shuffle<T>(items: T[]) {
-	return [...items]
-		.map((item) => ({ item, sort: Math.random() }))
-		.sort((left, right) => left.sort - right.sort)
-		.map(({ item }) => item);
-}
-
-function loadState(): AppState {
-	if (!browser) {
-		return defaultState;
-	}
-
-	const raw = localStorage.getItem(STORAGE_KEY);
-	if (!raw) {
-		return defaultState;
-	}
-
-	try {
-		const parsed = JSON.parse(raw) as AppState;
-		return {
-			...defaultState,
-			...parsed,
-			users: parsed.users?.length ? parsed.users : defaultState.users,
-			scores: parsed.scores?.length ? parsed.scores : defaultState.scores
-		};
-	} catch {
-		return defaultState;
-	}
-}
-
-function persistState(state: AppState) {
-	if (!browser) {
-		return;
-	}
-
-	localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
 function scoreFromDistance(distance: number) {
@@ -94,159 +34,195 @@ function distanceBetween(left: Point, right: Point) {
 	return Math.hypot(left.x - right.x, left.y - right.y);
 }
 
-function updateUserModeStats(user: UserRecord, score: ScoreEntry): UserRecord {
-	const key = score.modeKey;
-	const existing = user.modeStats[key] ?? createEmptyStats();
-	const gamesPlayed = existing.gamesPlayed + 1;
-	const averageScore = Math.round(
-		(existing.averageScore * existing.gamesPlayed + score.totalScore) / gamesPlayed
-	);
+async function requestJson<T>(input: RequestInfo | URL, init?: RequestInit): Promise<T> {
+	const response = await fetch(input, init);
+	const data = await response.json();
 
-	return {
-		...user,
-		modeStats: {
-			...user.modeStats,
-			[key]: {
-				bestScore: Math.max(existing.bestScore, score.totalScore),
-				lastScore: score.totalScore,
-				averageScore,
-				gamesPlayed,
-				lastPlayedAt: score.playedAt
-			}
-		}
-	};
+	if (!response.ok) {
+		throw new Error(data.message ?? 'Request failed');
+	}
+
+	return data as T;
 }
 
 function createAppStore() {
-	const { subscribe, update, set } = writable<AppState>(defaultState);
+	const { subscribe, set, update } = writable<AppState>(defaultState);
 	let initialized = false;
-
-	function ensureInitialized() {
-		if (initialized) {
-			return;
-		}
-
-		const state = loadState();
-		set(state);
-		initialized = true;
-	}
+	let initPromise: Promise<void> | null = null;
+	let latestState = defaultState;
 
 	subscribe((state) => {
-		if (initialized) {
-			persistState(state);
-		}
+		latestState = state;
 	});
+
+	function applyBootstrap(payload: {
+		currentUser: UserRecord | null;
+		profileScores: ScoreEntry[];
+		leaderboardScores: ScoreEntry[];
+	}) {
+		update((state) => ({
+			...state,
+			currentUser: payload.currentUser,
+			profileScores: payload.profileScores,
+			leaderboardScores: payload.leaderboardScores
+		}));
+
+		if (browser) {
+			if (payload.currentUser?.id) {
+				localStorage.setItem(STORAGE_KEY, payload.currentUser.id);
+			} else {
+				localStorage.removeItem(STORAGE_KEY);
+			}
+		}
+	}
+
+	async function refreshFromServer(userId: string) {
+		const payload = await requestJson<{
+			currentUser: UserRecord | null;
+			profileScores: ScoreEntry[];
+			leaderboardScores: ScoreEntry[];
+		}>(`/api/bootstrap?userId=${encodeURIComponent(userId)}`);
+
+		applyBootstrap(payload);
+		return payload;
+	}
 
 	return {
 		subscribe,
-		init: ensureInitialized,
-		login(email: string, password: string) {
-			let success = false;
-			let message = 'Login fehlgeschlagen.';
+		async init() {
+			if (initialized) {
+				return;
+			}
 
-			update((state) => {
-				const user = state.users.find(
-					(entry) => entry.email.toLowerCase() === email.toLowerCase() && entry.password === password
-				);
+			if (!browser) {
+				initialized = true;
+				return;
+			}
 
-				if (!user) {
-					message = 'E-Mail oder Passwort stimmt nicht.';
-					return state;
-				}
+			if (!initPromise) {
+				initPromise = (async () => {
+					const userId = localStorage.getItem(STORAGE_KEY);
 
-				success = true;
-				message = `Willkommen zurueck, ${user.username}.`;
+					if (!userId) {
+						set(defaultState);
+						initialized = true;
+						return;
+					}
 
-				return {
-					...state,
-					activeUserId: user.id
-				};
-			});
+					try {
+						await refreshFromServer(userId);
+					} catch {
+						localStorage.removeItem(STORAGE_KEY);
+						set(defaultState);
+					}
 
-			return { success, message };
+					initialized = true;
+				})();
+			}
+
+			await initPromise;
 		},
-		signup(email: string, password: string, username: string) {
-			let success = false;
-			let message = 'Signup fehlgeschlagen.';
+		async login(email: string, password: string) {
+			try {
+				const payload = await requestJson<{
+					currentUser: UserRecord;
+					profileScores: ScoreEntry[];
+					leaderboardScores: ScoreEntry[];
+				}>('/api/auth/login', {
+					method: 'POST',
+					headers: { 'content-type': 'application/json' },
+					body: JSON.stringify({ email, password })
+				});
 
-			update((state) => {
-				const emailExists = state.users.some(
-					(entry) => entry.email.toLowerCase() === email.toLowerCase()
-				);
-
-				if (emailExists) {
-					message = 'Diese E-Mail ist bereits registriert.';
-					return state;
-				}
-
-				const userId = `user-${crypto.randomUUID()}`;
-				const avatar = username
-					.split(' ')
-					.map((part) => part[0]?.toUpperCase() ?? '')
-					.join('')
-					.slice(0, 2);
-				const nextUser: UserRecord = {
-					id: userId,
-					email,
-					password,
-					username,
-					avatar: avatar || 'DG',
-					bio: 'Neuer Deadlock-Scout.',
-					createdAt: new Date().toISOString(),
-					modeStats: buildAllModeStats()
-				};
-
-				success = true;
-				message = `Account fuer ${username} wurde erstellt.`;
-
+				applyBootstrap(payload);
+				return { success: true, message: `Willkommen zurueck, ${payload.currentUser.username}.` };
+			} catch (error) {
 				return {
-					...state,
-					users: [...state.users, nextUser],
-					activeUserId: userId
+					success: false,
+					message: error instanceof Error ? error.message : 'Login fehlgeschlagen.'
 				};
-			});
+			}
+		},
+		async signup(email: string, password: string, username: string) {
+			try {
+				const payload = await requestJson<{
+					currentUser: UserRecord;
+					profileScores: ScoreEntry[];
+					leaderboardScores: ScoreEntry[];
+				}>('/api/auth/signup', {
+					method: 'POST',
+					headers: { 'content-type': 'application/json' },
+					body: JSON.stringify({ email, password, username })
+				});
 
-			return { success, message };
+				applyBootstrap(payload);
+				return {
+					success: true,
+					message: `Account fuer ${payload.currentUser.username} wurde erstellt.`
+				};
+			} catch (error) {
+				return {
+					success: false,
+					message: error instanceof Error ? error.message : 'Signup fehlgeschlagen.'
+				};
+			}
 		},
 		logout() {
-			update((state) => ({
-				...state,
-				activeUserId: null,
-				currentGame: null
-			}));
+			if (browser) {
+				localStorage.removeItem(STORAGE_KEY);
+			}
+
+			set(defaultState);
 			goto('/');
 		},
-		updateProfile(payload: { username: string; email: string; bio: string }) {
-			update((state) => {
-				if (!state.activeUserId) {
-					return state;
-				}
+		async updateProfile(payload: { username: string; email: string; bio: string }) {
+			if (!latestState.currentUser) {
+				return { success: false, message: 'Kein aktiver User.' };
+			}
 
-				return {
+			try {
+				const response = await requestJson<{ user: UserRecord | null }>(
+					`/api/users/${latestState.currentUser.id}`,
+					{
+						method: 'PATCH',
+						headers: { 'content-type': 'application/json' },
+						body: JSON.stringify(payload)
+					}
+				);
+
+				update((state) => ({
 					...state,
-					users: state.users.map((user) =>
-						user.id === state.activeUserId
-							? { ...user, username: payload.username, email: payload.email, bio: payload.bio }
-							: user
-					),
-					scores: state.scores.map((score) =>
-						score.userId === state.activeUserId
-							? {
-									...score,
-									username: payload.username
-								}
+					currentUser: response.user,
+					profileScores: state.profileScores.map((score) => ({
+						...score,
+						username: payload.username
+					})),
+					leaderboardScores: state.leaderboardScores.map((score) =>
+						score.userId === latestState.currentUser?.id
+							? { ...score, username: payload.username }
 							: score
 					)
+				}));
+
+				return { success: true, message: 'Profil gespeichert.' };
+			} catch (error) {
+				return {
+					success: false,
+					message: error instanceof Error ? error.message : 'Profil konnte nicht gespeichert werden.'
 				};
-			});
+			}
 		},
-		startGame(mode: GameMode) {
+		async startGame(mode: GameMode) {
+			const payload = await requestJson<{ pictures: RoundImage[] }>(
+				`/api/pictures/random?count=${mode.roundCount}`
+			);
+
 			update((state) => ({
 				...state,
 				currentGame: {
 					mode,
 					modeKey: modeKey(mode.roundCount, mode.timerSeconds),
-					images: shuffle(roundImages).slice(0, mode.roundCount),
+					images: payload.pictures,
 					roundIndex: 0,
 					roundStartedAt: Date.now(),
 					results: [],
@@ -255,11 +231,19 @@ function createAppStore() {
 				}
 			}));
 		},
-		submitGuess(guess: Point | null) {
+		async submitGuess(guess: Point | null) {
 			let finished = false;
+			let savePayload: {
+				userId: string;
+				modeKey: string;
+				roundCount: number;
+				timerSeconds: number;
+				rounds: RoundResult[];
+				totalScore: number;
+			} | null = null;
 
 			update((state) => {
-				if (!state.currentGame || state.currentGame.status !== 'playing' || !state.activeUserId) {
+				if (!state.currentGame || state.currentGame.status !== 'playing' || !state.currentUser) {
 					return state;
 				}
 
@@ -290,32 +274,18 @@ function createAppStore() {
 				}
 
 				const totalScore = results.reduce((sum, entry) => sum + entry.score, 0);
-				const user = state.users.find((entry) => entry.id === state.activeUserId);
-				if (!user) {
-					return state;
-				}
-
-				const score: ScoreEntry = {
-					id: `score-${crypto.randomUUID()}`,
-					userId: user.id,
-					username: user.username,
-					avatar: user.avatar,
+				savePayload = {
+					userId: state.currentUser.id,
 					modeKey: game.modeKey,
 					roundCount: game.mode.roundCount,
 					timerSeconds: game.mode.timerSeconds,
-					totalScore,
-					playedAt: new Date().toISOString(),
-					rounds: results
+					rounds: results,
+					totalScore
 				};
-
 				finished = true;
 
 				return {
 					...state,
-					users: state.users.map((entry) =>
-						entry.id === user.id ? updateUserModeStats(entry, score) : entry
-					),
-					scores: [score, ...state.scores],
 					currentGame: {
 						...game,
 						results,
@@ -324,6 +294,32 @@ function createAppStore() {
 					}
 				};
 			});
+
+			if (savePayload) {
+				try {
+					const payload = await requestJson<{
+						currentUser: UserRecord | null;
+						profileScores: ScoreEntry[];
+						leaderboardScores: ScoreEntry[];
+					}>('/api/scores', {
+						method: 'POST',
+						headers: { 'content-type': 'application/json' },
+						body: JSON.stringify(savePayload)
+					});
+
+					update((state) => ({
+						...state,
+						currentUser: payload.currentUser,
+						profileScores: payload.profileScores,
+						leaderboardScores: payload.leaderboardScores
+					}));
+				} catch (error) {
+					return {
+						finished,
+						error: error instanceof Error ? error.message : 'Score konnte nicht gespeichert werden.'
+					};
+				}
+			}
 
 			return { finished };
 		},
@@ -338,18 +334,18 @@ function createAppStore() {
 
 export const appStore = createAppStore();
 
-export const activeUser = derived(appStore, ($appStore) =>
-	$appStore.users.find((user) => user.id === $appStore.activeUserId) ?? null
-);
+export const activeUser = derived(appStore, ($appStore) => $appStore.currentUser);
 
-export const isAuthenticated = derived(appStore, ($appStore) => Boolean($appStore.activeUserId));
+export const isAuthenticated = derived(appStore, ($appStore) => Boolean($appStore.currentUser));
 
 export const currentGame = derived(appStore, ($appStore) => $appStore.currentGame);
+
+export const profileScores = derived(appStore, ($appStore) => $appStore.profileScores);
 
 export const leaderboardByMode = derived(appStore, ($appStore) => {
 	const grouped = new Map<string, ScoreEntry[]>();
 
-	for (const score of $appStore.scores) {
+	for (const score of $appStore.leaderboardScores) {
 		const bucket = grouped.get(score.modeKey) ?? [];
 		bucket.push(score);
 		grouped.set(score.modeKey, bucket);

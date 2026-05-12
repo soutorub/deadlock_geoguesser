@@ -39,6 +39,7 @@ export type ScoreEntry = {
 	roundCount: RoundCount;
 	timerSeconds: TimerSeconds;
 	totalScore: number;
+	isTopThreeForUser: boolean;
 	playedAt: string;
 	rounds: RoundResult[];
 };
@@ -74,8 +75,8 @@ export type CurrentGame = {
 };
 
 export type AppState = {
-	users: UserRecord[];
-	scores: ScoreEntry[];
-	activeUserId: string | null;
+	currentUser: UserRecord | null;
+	profileScores: ScoreEntry[];
+	leaderboardScores: ScoreEntry[];
 	currentGame: CurrentGame | null;
 };
