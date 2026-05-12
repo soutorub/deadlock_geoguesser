@@ -12,11 +12,13 @@ export async function GET() {
 		});
 	} catch (error) {
 		console.error('MongoDB health check failed:', error);
+		const details = error instanceof Error ? error.message : 'Unbekannter Fehler';
 
 		return json(
 			{
 				ok: false,
-				message: 'MongoDB connection failed'
+				message: 'MongoDB connection failed',
+				details
 			},
 			{ status: 500 }
 		);

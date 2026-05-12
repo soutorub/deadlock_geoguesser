@@ -36,10 +36,17 @@ function distanceBetween(left: Point, right: Point) {
 
 async function requestJson<T>(input: RequestInfo | URL, init?: RequestInit): Promise<T> {
 	const response = await fetch(input, init);
-	const data = await response.json();
+	const contentType = response.headers.get('content-type') ?? '';
+	const data = contentType.includes('application/json')
+		? await response.json()
+		: { message: await response.text() };
 
 	if (!response.ok) {
-		throw new Error(data.message ?? 'Request failed');
+		throw new Error(
+			typeof data.message === 'string' && data.message.trim()
+				? data.message
+				: `Request failed with status ${response.status}`
+		);
 	}
 
 	return data as T;

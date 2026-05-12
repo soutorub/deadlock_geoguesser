@@ -4,22 +4,27 @@ import { buildBootstrap, getCollections } from '$lib/server/db';
 import type { BootstrapPayload } from '$lib/types';
 
 export async function POST({ request }) {
-	const { email, password } = await request.json();
+	try {
+		const { email, password } = await request.json();
 
-	if (!email || !password) {
-		return json({ message: 'E-Mail und Passwort sind erforderlich.' }, { status: 400 });
+		if (!email || !password) {
+			return json({ message: 'E-Mail und Passwort sind erforderlich.' }, { status: 400 });
+		}
+
+		const { users } = await getCollections();
+		const user = await users.findOne({
+			email: String(email).trim().toLowerCase(),
+			passwordHash: hashPassword(String(password))
+		});
+
+		if (!user) {
+			return json({ message: 'E-Mail oder Passwort stimmt nicht.' }, { status: 401 });
+		}
+
+		const payload: BootstrapPayload = await buildBootstrap(user._id.toString());
+		return json(payload);
+	} catch (error) {
+		console.error('Login failed:', error);
+		return json({ message: 'Login ist momentan nicht verfuegbar.' }, { status: 500 });
 	}
-
-	const { users } = await getCollections();
-	const user = await users.findOne({
-		email: String(email).trim().toLowerCase(),
-		passwordHash: hashPassword(String(password))
-	});
-
-	if (!user) {
-		return json({ message: 'E-Mail oder Passwort stimmt nicht.' }, { status: 401 });
-	}
-
-	const payload: BootstrapPayload = await buildBootstrap(user._id.toString());
-	return json(payload);
 }
