@@ -55,11 +55,9 @@ export type ModeStats = {
 export type UserRecord = {
 	id: string;
 	email: string;
-	password: string;
 	username: string;
 	avatar: string;
 	bio: string;
-	createdAt: string;
 	modeStats: Record<string, ModeStats>;
 };
 
@@ -79,4 +77,10 @@ export type AppState = {
 	profileScores: ScoreEntry[];
 	leaderboardScores: ScoreEntry[];
 	currentGame: CurrentGame | null;
+};
+
+export type BootstrapPayload = {
+	currentUser: UserRecord | null;
+	profileScores: ScoreEntry[];
+	leaderboardScores: ScoreEntry[];
 };

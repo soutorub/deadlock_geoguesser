@@ -1,14 +1,14 @@
 import { browser } from '$app/environment';
 import { goto } from '$app/navigation';
-import { derived, writable } from 'svelte/store';
+import { derived, get, writable } from 'svelte/store';
 import type {
 	AppState,
+	BootstrapPayload,
 	GameMode,
 	Point,
 	RoundImage,
 	RoundResult,
-	ScoreEntry,
-	UserRecord
+	ScoreEntry
 } from '$lib/types';
 
 const STORAGE_KEY = 'deadlock-geoguesser-active-user';
@@ -49,17 +49,21 @@ function createAppStore() {
 	const { subscribe, set, update } = writable<AppState>(defaultState);
 	let initialized = false;
 	let initPromise: Promise<void> | null = null;
-	let latestState = defaultState;
 
-	subscribe((state) => {
-		latestState = state;
-	});
+	function persistActiveUser(currentUser: BootstrapPayload['currentUser']) {
+		if (!browser) {
+			return;
+		}
 
-	function applyBootstrap(payload: {
-		currentUser: UserRecord | null;
-		profileScores: ScoreEntry[];
-		leaderboardScores: ScoreEntry[];
-	}) {
+		if (currentUser?.id) {
+			localStorage.setItem(STORAGE_KEY, currentUser.id);
+			return;
+		}
+
+		localStorage.removeItem(STORAGE_KEY);
+	}
+
+	function applyBootstrap(payload: BootstrapPayload) {
 		update((state) => ({
 			...state,
 			currentUser: payload.currentUser,
@@ -67,21 +71,13 @@ function createAppStore() {
 			leaderboardScores: payload.leaderboardScores
 		}));
 
-		if (browser) {
-			if (payload.currentUser?.id) {
-				localStorage.setItem(STORAGE_KEY, payload.currentUser.id);
-			} else {
-				localStorage.removeItem(STORAGE_KEY);
-			}
-		}
+		persistActiveUser(payload.currentUser);
 	}
 
 	async function refreshFromServer(userId: string) {
-		const payload = await requestJson<{
-			currentUser: UserRecord | null;
-			profileScores: ScoreEntry[];
-			leaderboardScores: ScoreEntry[];
-		}>(`/api/bootstrap?userId=${encodeURIComponent(userId)}`);
+		const payload = await requestJson<BootstrapPayload>(
+			`/api/bootstrap?userId=${encodeURIComponent(userId)}`
+		);
 
 		applyBootstrap(payload);
 		return payload;
@@ -124,18 +120,17 @@ function createAppStore() {
 		},
 		async login(email: string, password: string) {
 			try {
-				const payload = await requestJson<{
-					currentUser: UserRecord;
-					profileScores: ScoreEntry[];
-					leaderboardScores: ScoreEntry[];
-				}>('/api/auth/login', {
+				const payload = await requestJson<BootstrapPayload>('/api/auth/login', {
 					method: 'POST',
 					headers: { 'content-type': 'application/json' },
 					body: JSON.stringify({ email, password })
 				});
 
 				applyBootstrap(payload);
-				return { success: true, message: `Willkommen zurueck, ${payload.currentUser.username}.` };
+				return {
+					success: true,
+					message: `Willkommen zurueck, ${payload.currentUser?.username ?? 'Scout'}.`
+				};
 			} catch (error) {
 				return {
 					success: false,
@@ -145,11 +140,7 @@ function createAppStore() {
 		},
 		async signup(email: string, password: string, username: string) {
 			try {
-				const payload = await requestJson<{
-					currentUser: UserRecord;
-					profileScores: ScoreEntry[];
-					leaderboardScores: ScoreEntry[];
-				}>('/api/auth/signup', {
+				const payload = await requestJson<BootstrapPayload>('/api/auth/signup', {
 					method: 'POST',
 					headers: { 'content-type': 'application/json' },
 					body: JSON.stringify({ email, password, username })
@@ -158,7 +149,7 @@ function createAppStore() {
 				applyBootstrap(payload);
 				return {
 					success: true,
-					message: `Account fuer ${payload.currentUser.username} wurde erstellt.`
+					message: `Account fuer ${payload.currentUser?.username ?? 'Scout'} wurde erstellt.`
 				};
 			} catch (error) {
 				return {
@@ -176,13 +167,14 @@ function createAppStore() {
 			goto('/');
 		},
 		async updateProfile(payload: { username: string; email: string; bio: string }) {
-			if (!latestState.currentUser) {
+			const state = get({ subscribe });
+			if (!state.currentUser) {
 				return { success: false, message: 'Kein aktiver User.' };
 			}
 
 			try {
-				const response = await requestJson<{ user: UserRecord | null }>(
-					`/api/users/${latestState.currentUser.id}`,
+				const response = await requestJson<{ user: BootstrapPayload['currentUser'] }>(
+					`/api/users/${state.currentUser.id}`,
 					{
 						method: 'PATCH',
 						headers: { 'content-type': 'application/json' },
@@ -198,7 +190,7 @@ function createAppStore() {
 						username: payload.username
 					})),
 					leaderboardScores: state.leaderboardScores.map((score) =>
-						score.userId === latestState.currentUser?.id
+						score.userId === state.currentUser?.id
 							? { ...score, username: payload.username }
 							: score
 					)
@@ -239,7 +231,6 @@ function createAppStore() {
 				roundCount: number;
 				timerSeconds: number;
 				rounds: RoundResult[];
-				totalScore: number;
 			} | null = null;
 
 			update((state) => {
@@ -279,8 +270,7 @@ function createAppStore() {
 					modeKey: game.modeKey,
 					roundCount: game.mode.roundCount,
 					timerSeconds: game.mode.timerSeconds,
-					rounds: results,
-					totalScore
+					rounds: results
 				};
 				finished = true;
 
@@ -297,22 +287,13 @@ function createAppStore() {
 
 			if (savePayload) {
 				try {
-					const payload = await requestJson<{
-						currentUser: UserRecord | null;
-						profileScores: ScoreEntry[];
-						leaderboardScores: ScoreEntry[];
-					}>('/api/scores', {
+					const payload = await requestJson<BootstrapPayload>('/api/scores', {
 						method: 'POST',
 						headers: { 'content-type': 'application/json' },
 						body: JSON.stringify(savePayload)
 					});
 
-					update((state) => ({
-						...state,
-						currentUser: payload.currentUser,
-						profileScores: payload.profileScores,
-						leaderboardScores: payload.leaderboardScores
-					}));
+					applyBootstrap(payload);
 				} catch (error) {
 					return {
 						finished,

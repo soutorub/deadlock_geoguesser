@@ -1,6 +1,13 @@
 import { ObjectId } from 'mongodb';
 import { getDatabase } from '$lib/server/mongodb';
-import type { ModeStats, RoundImage, RoundResult, ScoreEntry, UserRecord } from '$lib/types';
+import type {
+	BootstrapPayload,
+	ModeStats,
+	RoundImage,
+	RoundResult,
+	ScoreEntry,
+	UserRecord
+} from '$lib/types';
 
 type UserDocument = {
 	_id?: ObjectId;
@@ -88,11 +95,9 @@ function toUserRecord(document: UserDocument, scores: ScoreEntry[]): UserRecord 
 	return {
 		id: document._id?.toString() ?? '',
 		email: document.email,
-		password: '',
 		username: document.username,
 		avatar: document.avatar,
 		bio: document.bio,
-		createdAt: document.createdAt.toISOString(),
 		modeStats
 	};
 }
@@ -262,7 +267,7 @@ export async function getRandomPictures(count: number) {
 	return documents.map((document) => toRoundImage(document as PictureDocument));
 }
 
-export async function buildBootstrap(userId: string) {
+export async function buildBootstrap(userId: string): Promise<BootstrapPayload> {
 	const [currentUser, profileScores, leaderboardScores] = await Promise.all([
 		getUserById(userId),
 		getUserScores(userId),

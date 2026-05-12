@@ -1,6 +1,7 @@
 import { json } from '@sveltejs/kit';
 import { getCollections, buildBootstrap } from '$lib/server/db';
 import { hashPassword } from '$lib/server/auth';
+import type { BootstrapPayload } from '$lib/types';
 
 function avatarFromUsername(username: string) {
 	return (
@@ -39,6 +40,6 @@ export async function POST({ request }) {
 		updatedAt: now
 	});
 
-	const payload = await buildBootstrap(result.insertedId.toString());
+	const payload: BootstrapPayload = await buildBootstrap(result.insertedId.toString());
 	return json(payload, { status: 201 });
 }

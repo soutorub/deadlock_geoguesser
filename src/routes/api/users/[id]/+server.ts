@@ -15,6 +15,10 @@ export async function PATCH({ params, request }) {
 			bio: String(bio ?? '').trim()
 		});
 
+		if (!user) {
+			return json({ message: 'User wurde nicht gefunden.' }, { status: 404 });
+		}
+
 		return json({ user });
 	} catch (error) {
 		console.error('Profile update failed:', error);
