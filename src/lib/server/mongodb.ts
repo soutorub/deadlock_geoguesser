@@ -3,6 +3,11 @@ import { env } from '$env/dynamic/private';
 
 let client: MongoClient | null = null;
 let connected = false;
+const clientOptions = {
+	serverSelectionTimeoutMS: 5000,
+	connectTimeoutMS: 5000,
+	maxPoolSize: 5
+} as ConstructorParameters<typeof MongoClient>[1];
 
 export async function getDatabase() {
 	const mongoUri = env.MONGODB_URI;
@@ -17,7 +22,7 @@ export async function getDatabase() {
 	}
 
 	if (!client) {
-		client = new MongoClient(mongoUri);
+		client = new MongoClient(mongoUri, clientOptions);
 	}
 
 	if (!connected) {
