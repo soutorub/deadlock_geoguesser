@@ -21,7 +21,7 @@ export async function POST({ request }) {
 		const normalizedPassword = String(password ?? '');
 
 		if (!normalizedEmail || !normalizedUsername || normalizedPassword.length < 6) {
-			return json({ message: 'Bitte fuelle alle Felder korrekt aus.' }, { status: 400 });
+			return json({ message: 'Bitte fülle alle Felder korrekt aus.' }, { status: 400 });
 		}
 
 		const { users } = await getCollections();
@@ -45,6 +45,6 @@ export async function POST({ request }) {
 		return json(payload, { status: 201 });
 	} catch (error) {
 		console.error('Signup failed:', error);
-		return json({ message: 'Signup ist momentan nicht verfuegbar.' }, { status: 500 });
+		return json({ message: 'Signup ist momentan nicht verfügbar.' }, { status: 500 });
 	}
 }

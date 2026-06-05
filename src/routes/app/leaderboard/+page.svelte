@@ -69,7 +69,7 @@
 				<h2 class="h4 mb-0">Passende Spiele</h2>
 			</div>
 			<p class="small text-body-secondary mb-0">
-				Angezeigt werden nur Runden fuer {matchingGamesLabel}.
+				Angezeigt werden nur Runden für {matchingGamesLabel}.
 			</p>
 		</div>
 
@@ -102,9 +102,9 @@
 			</div>
 		{:else}
 			<div class="card bg-dark-subtle border-success-subtle">
-				<div class="card-body text-body-secondary">
-					Keine Highscore-Eintraege fuer den ausgewaehlten Filter.
-				</div>
+					<div class="card-body text-body-secondary">
+						Keine Highscore-Einträge für den ausgewählten Filter.
+					</div>
 			</div>
 		{/if}
 	</div>

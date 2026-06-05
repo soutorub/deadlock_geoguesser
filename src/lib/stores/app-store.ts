@@ -136,7 +136,7 @@ function createAppStore() {
 				applyBootstrap(payload);
 				return {
 					success: true,
-					message: `Willkommen zurueck, ${payload.currentUser?.username ?? 'Scout'}.`
+					message: `Willkommen zurück, ${payload.currentUser?.username ?? 'Scout'}.`
 				};
 			} catch (error) {
 				return {
@@ -156,7 +156,7 @@ function createAppStore() {
 				applyBootstrap(payload);
 				return {
 					success: true,
-					message: `Account fuer ${payload.currentUser?.username ?? 'Scout'} wurde erstellt.`
+					message: `Account für ${payload.currentUser?.username ?? 'Scout'} wurde erstellt.`
 				};
 			} catch (error) {
 				return {

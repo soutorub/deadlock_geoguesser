@@ -118,7 +118,7 @@
 					<div class="card-body p-4 d-flex flex-column">
 						<h3 class="h4">Map und Guess</h3>
 						<p class="text-body-secondary">
-							Setze deinen Pin auf die Deadlock-Map. Je naeher dein Guess, desto hoeher der
+							Setze deinen Pin auf die Deadlock-Map. Je näher dein Guess, desto höher der
 							Score.
 						</p>
 
@@ -143,9 +143,9 @@
 						</div>
 
 						<div class="d-grid gap-2 mt-auto pt-3">
-							<button class="btn btn-success" type="button" onclick={() => void submitGuess()}>Guess bestaetigen</button>
+							<button class="btn btn-success" type="button" onclick={() => void submitGuess()}>Guess bestätigen</button>
 							<button class="btn btn-outline-success" type="button" onclick={() => void submitGuess()}>
-								Ueberspringen
+								Überspringen
 							</button>
 						</div>
 					</div>

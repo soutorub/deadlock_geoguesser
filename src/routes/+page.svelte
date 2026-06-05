@@ -50,7 +50,7 @@
 					<h1 class="display-4 fw-bold mb-3">Deadlock GeoGuesser</h1>
 					<p class="lead text-body-secondary mb-4">
 						Logge dich ein oder erstelle einen Account. Danach startest du Deadlock-Runden
-						mit frei waehlbarer Bildanzahl und Timer.
+						mit frei wählbarer Bildanzahl und Timer.
 					</p>
 
 					<div class="row g-3">
@@ -66,7 +66,7 @@
 							<div class="card h-100 border-success-subtle bg-dark-subtle">
 								<div class="card-body">
 									<h2 class="h6">Guessing</h2>
-									<p class="small mb-0 text-body-secondary">Map aufklappen, Pin setzen und ueber Distanz Punkte erhalten.</p>
+									<p class="small mb-0 text-body-secondary">Map aufklappen, Pin setzen und über Distanz Punkte erhalten.</p>
 								</div>
 							</div>
 						</div>

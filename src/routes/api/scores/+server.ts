@@ -6,7 +6,7 @@ export async function POST({ request }) {
 	const { userId, modeKey, roundCount, timerSeconds, rounds } = await request.json();
 
 	if (!userId || !modeKey || !roundCount || !timerSeconds || !Array.isArray(rounds)) {
-		return json({ message: 'Unvollstaendige Score-Daten.' }, { status: 400 });
+		return json({ message: 'Unvollständige Score-Daten.' }, { status: 400 });
 	}
 
 	try {

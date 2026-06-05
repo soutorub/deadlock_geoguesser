@@ -142,7 +142,7 @@
 					</div>
 
 					<p class="small text-body-secondary mb-3">
-						Angezeigt werden die Statistikwerte fuer {matchingGamesLabel}.
+						Angezeigt werden die Statistikwerte für {matchingGamesLabel}.
 					</p>
 
 					<div class="table-responsive">
@@ -200,7 +200,7 @@
 									{/each}
 								{:else}
 									<tr>
-										<td colspan="4" class="text-body-secondary">Keine Scores fuer den gewaelten Filter.</td>
+										<td colspan="4" class="text-body-secondary">Keine Scores für den gewählten Filter.</td>
 									</tr>
 								{/if}
 							</tbody>

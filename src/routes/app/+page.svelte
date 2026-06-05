@@ -33,7 +33,7 @@
 					<p class="text-uppercase small fw-semibold text-success mb-2">Home</p>
 					<h2 class="h3 mb-3">Neue Runde konfigurieren</h2>
 					<p class="text-body-secondary mb-4">
-						Waehle Bildanzahl und Timer. Nach dem Spiel wird der Score automatisch im Profil und
+						Wähle Bildanzahl und Timer. Nach dem Spiel wird der Score automatisch im Profil und
 						Leaderboard gespeichert.
 					</p>
 
@@ -68,10 +68,10 @@
 
 			<div class="card border-success-subtle shadow-sm dashboard-card">
 				<div class="card-body p-4">
-					<h3 class="h5 mb-3">So laeuft eine Runde ab</h3>
+					<h3 class="h5 mb-3">So läuft eine Runde ab</h3>
 					<div class="row g-3">
 						<div class="col-md-4">
-							<div class="small text-body-secondary">1. Modus waehlen</div>
+							<div class="small text-body-secondary">1. Modus wählen</div>
 							<div class="fw-semibold">Bilderanzahl und Timer separat festlegen.</div>
 						</div>
 						<div class="col-md-4">
@@ -127,7 +127,7 @@
 					<div class="card-body d-flex flex-column gap-2">
 						<ModeBadge mode={{ roundCount, timerSeconds }} />
 						<p class="small text-body-secondary mb-0">
-							Kompakte Auswahl fuer deinen Bootstrap-Prototypen mit klar getrennten Modi.
+							Kompakte Auswahl für deinen Bootstrap-Prototypen mit klar getrennten Modi.
 						</p>
 					</div>
 				</div>

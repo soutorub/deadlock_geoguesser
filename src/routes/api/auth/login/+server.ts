@@ -25,6 +25,6 @@ export async function POST({ request }) {
 		return json(payload);
 	} catch (error) {
 		console.error('Login failed:', error);
-		return json({ message: 'Login ist momentan nicht verfuegbar.' }, { status: 500 });
+		return json({ message: 'Login ist momentan nicht verfügbar.' }, { status: 500 });
 	}
 }
