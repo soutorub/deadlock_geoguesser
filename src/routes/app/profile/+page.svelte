@@ -76,7 +76,7 @@
 {#if $activeUser}
 	<div class="row g-4">
 		<div class="col-lg-4">
-			<section class="card border-success-subtle shadow-sm profile-card h-100">
+			<section class="card border-success-subtle shadow-sm app-panel-card h-100">
 				<div class="card-body p-4">
 					<div class="d-flex align-items-center gap-3">
 						<div class="avatar">{$activeUser.avatar}</div>
@@ -118,7 +118,7 @@
 		</div>
 
 		<div class="col-lg-8">
-			<section class="card border-success-subtle shadow-sm profile-card mb-4">
+			<section class="card border-success-subtle shadow-sm app-panel-card mb-4">
 				<div class="card-body p-4">
 					<div class="d-flex justify-content-between align-items-center gap-3 flex-wrap mb-3">
 						<div>
@@ -172,7 +172,7 @@
 				</div>
 			</section>
 
-			<section class="card border-success-subtle shadow-sm profile-card">
+			<section class="card border-success-subtle shadow-sm app-panel-card">
 				<div class="card-body p-4">
 					<h3 class="h5 mb-1">Vergangene Scores</h3>
 					<p class="small text-body-secondary mb-3">
@@ -216,13 +216,14 @@
 	.avatar {
 		width: 4rem;
 		height: 4rem;
-		border-radius: 999px;
+		border-radius: 0;
 		display: grid;
 		place-items: center;
-		background: linear-gradient(135deg, #3ddc84, #89f7b5);
-		color: #07100b;
+		background: #c7d36f;
+		color: #0b0e0c;
 		font-size: 1.4rem;
 		font-weight: 800;
+		border: 1px solid rgba(11, 14, 12, 0.5);
 	}
 
 	.bio,
@@ -233,9 +234,5 @@
 
 	.bio {
 		margin: 1rem 0 1.2rem;
-	}
-
-	.profile-card {
-		background: rgba(8, 17, 12, 0.9);
 	}
 </style>

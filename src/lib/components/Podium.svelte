@@ -53,15 +53,16 @@
 		width: 3.2rem;
 		height: 3.2rem;
 		margin: 0 auto 0.75rem;
-		border-radius: 999px;
+		border-radius: 0;
 		display: grid;
 		place-items: center;
 		font-weight: 700;
 	}
 
 	.avatar {
-		background: linear-gradient(135deg, #f5e7a1, #d2a93f);
+		background: #d2a93f;
 		color: #221507;
+		border: 1px solid rgba(34, 21, 7, 0.38);
 	}
 
 	.placeholder {
@@ -84,36 +85,36 @@
 	.pillar {
 		display: grid;
 		place-items: center;
-		border-radius: 1.2rem 1.2rem 0 0;
-		background: linear-gradient(180deg, #e7c665, #b98618);
+		border-radius: 0;
+		background: #b98618;
 		color: #221507;
 		font-weight: 800;
 	}
 
 	.rank-1 .pillar {
-		background: linear-gradient(180deg, #ffe99a, #d4a62f);
+		background: #d4a62f;
 	}
 
 	.rank-2 .pillar {
-		background: linear-gradient(180deg, #f2f4f8, #9ca4b3);
+		background: #b8bec8;
 	}
 
 	.rank-3 .pillar {
-		background: linear-gradient(180deg, #eab183, #a55b2a);
+		background: #b26d3e;
 	}
 
 	.rank-2 .avatar {
-		background: linear-gradient(135deg, #f2f4f8, #9ca4b3);
+		background: #b8bec8;
 		color: #17202d;
 	}
 
 	.rank-1 .avatar {
-		background: linear-gradient(135deg, #ffe99a, #d4a62f);
+		background: #d4a62f;
 		color: #221507;
 	}
 
 	.rank-3 .avatar {
-		background: linear-gradient(135deg, #eab183, #a55b2a);
+		background: #b26d3e;
 		color: #2a1308;
 	}
 
@@ -124,7 +125,7 @@
 		}
 
 		.pillar {
-			border-radius: 1.2rem;
+			border-radius: 0;
 		}
 	}
 </style>

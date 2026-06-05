@@ -68,10 +68,8 @@
 		selectedGuess = null;
 		saveError = result.error ?? '';
 
-		if (result.finished) {
-			if (timerHandle) {
-				clearInterval(timerHandle);
-			}
+		if (result.finished && timerHandle) {
+			clearInterval(timerHandle);
 		}
 	}
 
@@ -88,116 +86,251 @@
 {#if $currentGame}
 	{#if $currentGame.status === 'playing'}
 		{@const round = $currentGame.images[$currentGame.roundIndex]}
-		<div class="row g-4">
-			<section class="col-lg-8">
-				<div class="card border-success-subtle shadow-sm game-card h-100">
-					<div class="card-body p-4">
-						<div class="d-flex justify-content-between align-items-center gap-3 flex-wrap">
+		<div class="game-grid">
+			<section class="app-panel-card game-panel game-main-panel">
+				<div class="game-topline">
 					<ModeBadge mode={$currentGame.mode} />
-							<div class="badge text-bg-dark border border-success-subtle fs-6">{remainingSeconds}s</div>
-						</div>
+					<div class="badge text-bg-dark border border-success-subtle fs-6">{remainingSeconds}s</div>
+				</div>
 
-						<div class="mt-4">
-							<p class="text-uppercase small fw-semibold text-success mb-2">
-								Bild {$currentGame.roundIndex + 1} / {$currentGame.images.length}
-							</p>
-							<h2 class="h3">{round.title}</h2>
-							<p class="text-body-secondary mb-2">{round.description}</p>
-							<p class="small text-success-emphasis mb-0">{round.hint}</p>
-						</div>
+				<div class="game-copy-block">
+					<p class="app-eyebrow">Bild {$currentGame.roundIndex + 1} / {$currentGame.images.length}</p>
+					<h2 class="game-title">{round.title}</h2>
+					<p class="game-description">{round.description}</p>
+					<p class="game-hint">{round.hint}</p>
+				</div>
 
-						<div class="art-frame mt-4">
-							<img class="img-fluid w-100 h-100 object-fit-cover" src={round.imageUrl} alt={round.title} />
-						</div>
-					</div>
+				<div class="art-frame">
+					<img class="img-fluid w-100 h-100 object-fit-cover" src={round.imageUrl} alt={round.title} />
 				</div>
 			</section>
 
-			<section class="col-lg-4">
-				<div class="card border-success-subtle shadow-sm game-card h-100">
-					<div class="card-body p-4 d-flex flex-column">
-						<h3 class="h4">Map und Guess</h3>
-						<p class="text-body-secondary">
-							Setze deinen Pin auf die Deadlock-Map. Je näher dein Guess, desto höher der
-							Score.
+			<section class="app-panel-card game-panel game-side-panel">
+				<div>
+					<h3 class="game-side-title">Map und Guess</h3>
+					<p class="game-side-copy">
+						Setze deinen Pin auf die Deadlock-Map. Je näher dein Guess, desto höher der Score.
+					</p>
+				</div>
+
+				<div class="game-map-wrap">
+					<DeadlockMap
+						selectedGuess={selectedGuess}
+						interactive
+						onGuess={(point) => (selectedGuess = point)}
+					/>
+				</div>
+
+				<div class="app-stat-card game-pin-card">
+					{#if selectedGuess}
+						<p class="mb-0">Dein Pin: X {selectedGuess.x}% · Y {selectedGuess.y}%</p>
+					{:else}
+						<p class="mb-0 text-body-secondary">
+							Noch kein Pin gesetzt. Klick auf die Karte, um deine Vermutung zu platzieren.
 						</p>
+					{/if}
+				</div>
 
-						<div class="mt-2">
-							<DeadlockMap
-								selectedGuess={selectedGuess}
-								interactive
-								onGuess={(point) => (selectedGuess = point)}
-							/>
-						</div>
-
-						<div class="card bg-dark-subtle border-success-subtle mt-3">
-							<div class="card-body py-3">
-								{#if selectedGuess}
-									<p class="mb-0 small">Dein Pin: X {selectedGuess.x}% · Y {selectedGuess.y}%</p>
-								{:else}
-									<p class="mb-0 small text-body-secondary">
-										Noch kein Pin gesetzt. Klick auf die Karte, um deine Vermutung zu platzieren.
-									</p>
-								{/if}
-							</div>
-						</div>
-
-						<div class="d-grid gap-2 mt-auto pt-3">
-							<button class="btn btn-success" type="button" onclick={() => void submitGuess()}>Guess bestätigen</button>
-							<button class="btn btn-outline-success" type="button" onclick={() => void submitGuess()}>
-								Überspringen
-							</button>
-						</div>
-					</div>
+				<div class="game-action-group">
+					<button class="btn btn-success w-100" type="button" onclick={() => void submitGuess()}>
+						Guess bestätigen
+					</button>
+					<button class="btn btn-outline-success w-100" type="button" onclick={() => void submitGuess()}>
+						Überspringen
+					</button>
 				</div>
 			</section>
 		</div>
 	{:else}
-		<section class="card border-success-subtle shadow-sm game-card">
-			<div class="card-body p-4">
-				<p class="text-uppercase small fw-semibold text-success mb-2">Runde abgeschlossen</p>
-				<h2 class="h3">{$currentGame.finalScore} Gesamtpunkte</h2>
-				<p class="text-body-secondary">
-					Deine Scores wurden gespeichert und fliessen jetzt sowohl ins Profil als auch in die
-					Highscore-Ansicht ein.
-				</p>
-				{#if saveError}
-					<div class="alert alert-warning py-2">{saveError}</div>
-				{/if}
+		<section class="app-panel-card game-finished-panel">
+			<p class="app-eyebrow">Runde abgeschlossen</p>
+			<h2 class="app-section-title">{$currentGame.finalScore} Gesamtpunkte</h2>
+			<p class="app-copy">
+				Deine Scores wurden gespeichert und fliessen jetzt sowohl ins Profil als auch in die
+				Highscore-Ansicht ein.
+			</p>
+			{#if saveError}
+				<div class="alert alert-warning py-2">{saveError}</div>
+			{/if}
 
-				<div class="row g-3 my-1">
+			<div class="game-results-grid">
 				{#each $currentGame.results as result, index}
-						<div class="col-md-4">
-							<div class="card bg-dark-subtle border-success-subtle h-100">
-								<div class="card-body">
-									<strong>#{index + 1} {result.imageTitle}</strong>
-									<p class="mb-1 mt-2">{result.score} Punkte</p>
-									<span class="small text-body-secondary">Distanz: {result.distance}</span>
-								</div>
-							</div>
-						</div>
+					<div class="app-stat-card game-result-card">
+						<strong>#{index + 1} {result.imageTitle}</strong>
+						<p>{result.score} Punkte</p>
+						<span class="text-body-secondary">Distanz: {result.distance}</span>
+					</div>
 				{/each}
-				</div>
+			</div>
 
-				<div class="d-flex gap-2 flex-wrap mt-4">
-					<button class="btn btn-success" type="button" onclick={() => goto('/app/profile')}>
-					Zum Profil
-				</button>
-					<button class="btn btn-outline-success" type="button" onclick={leaveGame}>Neue Runde bauen</button>
-				</div>
+			<div class="game-finished-actions">
+				<button class="btn btn-success" type="button" onclick={() => goto('/app/profile')}>Zum Profil</button>
+				<button class="btn btn-outline-success" type="button" onclick={leaveGame}>Neue Runde bauen</button>
 			</div>
 		</section>
 	{/if}
 {/if}
 
 <style>
-	.art-frame {
-		border-radius: 1.4rem;
-		overflow: hidden;
-		min-height: 32rem;
+	.game-grid {
+		display: grid;
+		grid-template-columns: 56% 44%;
+		gap: 1rem;
+		align-items: stretch;
 	}
 
-	.game-card {
-		background: rgba(8, 17, 12, 0.9);
+	.game-panel,
+	.game-finished-panel {
+		padding: 1.45rem;
+	}
+
+	.game-main-panel {
+		display: grid;
+		gap: 1.35rem;
+	}
+
+	.game-topline {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
+
+	.game-copy-block {
+		display: grid;
+		gap: 0.6rem;
+	}
+
+	.game-title {
+		font-size: 2rem;
+		margin: 0;
+	}
+
+	.game-description,
+	.game-hint {
+		margin: 0;
+	}
+
+	.game-description {
+		font-size: 1.08rem;
+		color: var(--app-muted);
+	}
+
+	.game-hint {
+		font-size: 1rem;
+		color: rgba(139, 197, 63, 0.8);
+	}
+
+	.art-frame {
+		border-radius: 0;
+		overflow: hidden;
+		height: clamp(28rem, 54vh, 40rem);
+		max-height: 40rem;
+		border: 1px solid rgba(209, 232, 183, 0.12);
+	}
+
+	.game-side-panel {
+		display: grid;
+		align-content: start;
+		gap: 1rem;
+	}
+
+	.game-side-title {
+		font-size: 1.9rem;
+		margin: 0 0 0.5rem;
+	}
+
+	.game-side-copy {
+		margin: 0;
+		font-size: 1.08rem;
+		color: var(--app-muted);
+		line-height: 1.45;
+	}
+
+	.game-map-wrap {
+		display: grid;
+		width: 100%;
+	}
+
+	.game-pin-card {
+		padding: 1rem 1.1rem;
+		font-size: 1rem;
+	}
+
+	.game-action-group {
+		display: grid;
+		gap: 0.8rem;
+		margin-top: auto;
+	}
+
+	.game-results-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1rem;
+		margin: 1.5rem 0;
+	}
+
+	.game-result-card {
+		padding: 1.1rem;
+		display: grid;
+		gap: 0.55rem;
+	}
+
+	.game-result-card p,
+	.game-result-card span {
+		margin: 0;
+	}
+
+	.game-finished-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.8rem;
+	}
+
+	:global(.game-map-wrap .map) {
+		min-height: 780px;
+		width: 100%;
+	}
+
+	:global(.game-map-wrap .sector) {
+		font-size: 0.96rem;
+		padding: 0.45rem 0.65rem;
+	}
+
+	:global(.game-map-wrap .marker) {
+		width: 1.35rem;
+		height: 1.35rem;
+	}
+
+	:global(.game-map-wrap .marker span) {
+		top: 1.6rem;
+		font-size: 0.82rem;
+	}
+
+	@media (max-width: 1200px) {
+		.game-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 820px) {
+		.game-panel,
+		.game-finished-panel {
+			padding: 1.2rem;
+		}
+
+		.art-frame {
+			height: clamp(22rem, 42vh, 28rem);
+			max-height: 28rem;
+		}
+
+		:global(.game-map-wrap .map) {
+			min-height: 480px;
+		}
+
+		.game-results-grid {
+			grid-template-columns: 1fr;
+		}
 	}
 </style>

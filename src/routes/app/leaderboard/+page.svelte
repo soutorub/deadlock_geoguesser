@@ -36,7 +36,7 @@
 	<title>Leaderboard | Deadlock GeoGuesser</title>
 </svelte:head>
 
-<div class="card border-success-subtle shadow-sm leaderboard-card mb-4">
+<div class="card border-success-subtle shadow-sm app-panel-card mb-4">
 	<div class="card-body p-4">
 		<div class="d-flex justify-content-between align-items-center gap-3 flex-wrap">
 			<div>
@@ -61,7 +61,7 @@
 	</div>
 </div>
 
-<section class="card border-success-subtle shadow-sm leaderboard-card">
+<section class="card border-success-subtle shadow-sm app-panel-card">
 	<div class="card-body p-4">
 		<div class="d-flex justify-content-between align-items-end gap-3 flex-wrap mb-3">
 			<div>
@@ -101,7 +101,7 @@
 				</table>
 			</div>
 		{:else}
-			<div class="card bg-dark-subtle border-success-subtle">
+			<div class="card border-success-subtle app-stat-card">
 					<div class="card-body text-body-secondary">
 						Keine Highscore-Einträge für den ausgewählten Filter.
 					</div>
@@ -109,9 +109,3 @@
 		{/if}
 	</div>
 </section>
-
-<style>
-	.leaderboard-card {
-		background: rgba(8, 17, 12, 0.9);
-	}
-</style>

@@ -61,14 +61,14 @@
 		display: block;
 		width: 100%;
 		min-height: 280px;
-		border-radius: 1.4rem;
+		border-radius: 0;
 		overflow: hidden;
-		border: 1px solid rgba(247, 178, 103, 0.28);
+		border: 1px solid rgba(199, 211, 111, 0.18);
 		background:
-			linear-gradient(140deg, rgba(34, 53, 78, 0.95), rgba(17, 27, 38, 0.98)),
+			linear-gradient(160deg, rgba(28, 36, 33, 0.98), rgba(18, 23, 20, 0.98)),
 			linear-gradient(90deg, transparent 49%, rgba(255, 255, 255, 0.08) 50%, transparent 51%),
 			linear-gradient(transparent 49%, rgba(255, 255, 255, 0.08) 50%, transparent 51%);
-		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
 	}
 
 	.map::before {
@@ -93,11 +93,11 @@
 	.sector {
 		position: absolute;
 		padding: 0.35rem 0.55rem;
-		border-radius: 999px;
+		border-radius: 0;
 		font-size: 0.82rem;
-		color: rgba(246, 241, 232, 0.8);
-		background: rgba(9, 16, 23, 0.28);
-		backdrop-filter: blur(6px);
+		color: rgba(233, 240, 231, 0.82);
+		background: rgba(8, 10, 9, 0.45);
+		border: 1px solid rgba(209, 232, 183, 0.08);
 	}
 
 	.canal {
@@ -145,7 +145,7 @@
 		transform: translate(-50%, -50%);
 		width: 1.15rem;
 		height: 1.15rem;
-		border-radius: 999px;
+		border-radius: 0;
 		box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.09);
 	}
 
@@ -156,7 +156,7 @@
 		transform: translateX(-50%);
 		white-space: nowrap;
 		padding: 0.25rem 0.45rem;
-		border-radius: 999px;
+		border-radius: 0;
 		font-size: 0.74rem;
 		background: rgba(9, 16, 23, 0.72);
 	}
