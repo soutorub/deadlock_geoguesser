@@ -74,138 +74,128 @@
 </svelte:head>
 
 {#if $activeUser}
-	<div class="row g-4">
-		<div class="col-lg-4">
-			<section class="card border-success-subtle shadow-sm app-panel-card h-100">
-				<div class="card-body p-4">
-					<div class="d-flex align-items-center gap-3">
-						<div class="avatar">{$activeUser.avatar}</div>
-						<div>
-							<h2 class="h4 mb-1">{$activeUser.username}</h2>
-							<p class="text-body-secondary mb-0">{$activeUser.email}</p>
-						</div>
-					</div>
-
-					<p class="bio text-body-secondary">{$activeUser.bio}</p>
-
-					<button class="btn btn-success w-100" type="button" onclick={() => (editing = !editing)}>
-						{editing ? 'Bearbeitung schliessen' : 'Profil bearbeiten'}
-					</button>
-
-					{#if editing}
-						<form class="edit-form mt-3" onsubmit={saveProfile}>
-							<div>
-								<label class="form-label" for="profile-username">Username</label>
-								<input id="profile-username" class="form-control" bind:value={username} required />
-							</div>
-							<div>
-								<label class="form-label" for="profile-email">E-Mail</label>
-								<input id="profile-email" class="form-control" bind:value={email} type="email" required />
-							</div>
-							<div>
-								<label class="form-label" for="profile-bio">Bio</label>
-								<textarea id="profile-bio" class="form-control" bind:value={bio} rows="4"></textarea>
-							</div>
-							<button class="btn btn-outline-success" type="submit">Speichern</button>
-						</form>
-					{/if}
-
-					{#if saveMessage}
-						<div class="alert alert-success py-2 mt-3 mb-0">{saveMessage}</div>
-					{/if}
+	<div class="profile-grid">
+		<section class="app-panel-card profile-panel profile-summary-panel">
+			<div class="profile-summary">
+				<div class="profile-avatar">{$activeUser.avatar}</div>
+				<div>
+					<h2>{$activeUser.username}</h2>
+					<p>{$activeUser.email}</p>
 				</div>
-			</section>
-		</div>
+			</div>
 
-		<div class="col-lg-8">
-			<section class="card border-success-subtle shadow-sm app-panel-card mb-4">
-				<div class="card-body p-4">
-					<div class="d-flex justify-content-between align-items-center gap-3 flex-wrap mb-3">
-						<div>
-							<p class="text-uppercase small fw-semibold text-success mb-1">Scores pro Spielart</p>
-							<h2 class="h4 mb-0">Gefilterte Modi</h2>
-						</div>
-						<div class="d-flex gap-2 flex-wrap">
-							<select class="form-select" bind:value={selectedRoundCount}>
-								<option value="all">Alle Bildanzahlen</option>
-								{#each roundCounts as count}
-									<option value={String(count)}>{count} Bilder</option>
-								{/each}
-							</select>
-							<select class="form-select" bind:value={selectedTimer}>
-								<option value="all">Alle Timer</option>
-								{#each timers as timer}
-									<option value={String(timer)}>{labelForTimer(timer)}</option>
-								{/each}
-							</select>
-						</div>
+			<p class="profile-bio">{$activeUser.bio}</p>
+
+			<button class="btn btn-success app-button-block" type="button" onclick={() => (editing = !editing)}>
+				{editing ? 'Bearbeitung schliessen' : 'Profil bearbeiten'}
+			</button>
+
+			{#if editing}
+				<form class="profile-form" onsubmit={saveProfile}>
+					<div class="profile-field">
+						<label for="profile-username">Username</label>
+						<input id="profile-username" class="form-control" bind:value={username} required />
 					</div>
-
-					<p class="small text-body-secondary mb-3">
-						Angezeigt werden die Statistikwerte für {matchingGamesLabel}.
-					</p>
-
-					<div class="table-responsive">
-						<table class="table align-middle">
-							<thead>
-								<tr>
-									<th>Spielart</th>
-									<th>Bestscore</th>
-									<th>Letzter Score</th>
-									<th>Avg.</th>
-									<th>Games</th>
-								</tr>
-							</thead>
-							<tbody>
-								{#each filteredStats as entry}
-								<tr>
-									<td>{entry.count} Bilder / {labelForTimer(entry.timer)}</td>
-									<td>{entry.stats?.bestScore ?? 0}</td>
-									<td>{entry.stats?.lastScore ?? 0}</td>
-									<td>{entry.stats?.averageScore ?? 0}</td>
-									<td>{entry.stats?.gamesPlayed ?? 0}</td>
-								</tr>
-								{/each}
-							</tbody>
-						</table>
+					<div class="profile-field">
+						<label for="profile-email">E-Mail</label>
+						<input id="profile-email" class="form-control" bind:value={email} type="email" required />
 					</div>
+					<div class="profile-field">
+						<label for="profile-bio">Bio</label>
+						<textarea id="profile-bio" class="form-control" bind:value={bio} rows="4"></textarea>
+					</div>
+					<button class="btn btn-outline-success" type="submit">Speichern</button>
+				</form>
+			{/if}
+
+			{#if saveMessage}
+				<div class="alert alert-success app-inline-alert">{saveMessage}</div>
+			{/if}
+		</section>
+
+		<div class="profile-content">
+			<section class="app-panel-card profile-panel">
+				<div class="profile-panel-topline">
+					<div>
+						<p class="app-eyebrow">Scores pro Spielart</p>
+						<h2 class="app-section-title">Gefilterte Modi</h2>
+					</div>
+					<div class="profile-filter-row">
+						<select class="form-select" bind:value={selectedRoundCount}>
+							<option value="all">Alle Bildanzahlen</option>
+							{#each roundCounts as count}
+								<option value={String(count)}>{count} Bilder</option>
+							{/each}
+						</select>
+						<select class="form-select" bind:value={selectedTimer}>
+							<option value="all">Alle Timer</option>
+							{#each timers as timer}
+								<option value={String(timer)}>{labelForTimer(timer)}</option>
+							{/each}
+						</select>
+					</div>
+				</div>
+
+				<p class="profile-copy">Angezeigt werden die Statistikwerte für {matchingGamesLabel}.</p>
+
+				<div class="app-table-wrap">
+					<table class="table profile-table">
+						<thead>
+							<tr>
+								<th>Spielart</th>
+								<th>Bestscore</th>
+								<th>Letzter Score</th>
+								<th>Avg.</th>
+								<th>Games</th>
+							</tr>
+						</thead>
+						<tbody>
+							{#each filteredStats as entry}
+							<tr>
+								<td>{entry.count} Bilder / {labelForTimer(entry.timer)}</td>
+								<td>{entry.stats?.bestScore ?? 0}</td>
+								<td>{entry.stats?.lastScore ?? 0}</td>
+								<td>{entry.stats?.averageScore ?? 0}</td>
+								<td>{entry.stats?.gamesPlayed ?? 0}</td>
+							</tr>
+							{/each}
+						</tbody>
+					</table>
 				</div>
 			</section>
 
-			<section class="card border-success-subtle shadow-sm app-panel-card">
-				<div class="card-body p-4">
-					<h3 class="h5 mb-1">Vergangene Scores</h3>
-					<p class="small text-body-secondary mb-3">
-						Hier siehst du nur die gespielten Runden, die zu {matchingGamesLabel} passen.
-					</p>
-					<div class="table-responsive">
-						<table class="table align-middle mb-0">
-							<thead>
-								<tr>
-									<th>Datum</th>
-									<th>Modus</th>
-									<th>Score</th>
-									<th>Runden</th>
-								</tr>
-							</thead>
-							<tbody>
-								{#if filteredScores.length}
-									{#each filteredScores as score}
-										<tr>
-											<td>{new Date(score.playedAt).toLocaleDateString('de-CH')}</td>
-											<td>{score.roundCount} Bilder / {labelForTimer(score.timerSeconds)}</td>
-											<td>{score.totalScore}</td>
-											<td>{score.rounds.length}</td>
-										</tr>
-									{/each}
-								{:else}
+			<section class="app-panel-card profile-panel">
+				<h3 class="profile-subtitle">Vergangene Scores</h3>
+				<p class="profile-copy">
+					Hier siehst du nur die gespielten Runden, die zu {matchingGamesLabel} passen.
+				</p>
+				<div class="app-table-wrap">
+					<table class="table profile-table profile-table-compact">
+						<thead>
+							<tr>
+								<th>Datum</th>
+								<th>Modus</th>
+								<th>Score</th>
+								<th>Runden</th>
+							</tr>
+						</thead>
+						<tbody>
+							{#if filteredScores.length}
+								{#each filteredScores as score}
 									<tr>
-										<td colspan="4" class="text-body-secondary">Keine Scores für den gewählten Filter.</td>
+										<td>{new Date(score.playedAt).toLocaleDateString('de-CH')}</td>
+										<td>{score.roundCount} Bilder / {labelForTimer(score.timerSeconds)}</td>
+										<td>{score.totalScore}</td>
+										<td>{score.rounds.length}</td>
 									</tr>
-								{/if}
-							</tbody>
-						</table>
-					</div>
+								{/each}
+							{:else}
+								<tr>
+									<td colspan="4" class="profile-empty-row">Keine Scores für den gewählten Filter.</td>
+								</tr>
+							{/if}
+						</tbody>
+					</table>
 				</div>
 			</section>
 		</div>
@@ -213,26 +203,105 @@
 {/if}
 
 <style>
-	.avatar {
-		width: 4rem;
-		height: 4rem;
-		border-radius: 0;
+	.profile-grid {
 		display: grid;
-		place-items: center;
-		background: #c7d36f;
-		color: #0b0e0c;
-		font-size: 1.4rem;
-		font-weight: 800;
-		border: 1px solid rgba(11, 14, 12, 0.5);
+		grid-template-columns: 34% 66%;
+		gap: 1.35rem;
+		align-items: start;
 	}
 
-	.bio,
-	.edit-form {
+	.profile-panel {
+		padding: 1.8rem;
+	}
+
+	.profile-summary-panel {
+		display: grid;
+		align-content: start;
+		gap: 1.2rem;
+	}
+
+	.profile-summary {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+
+		h2 {
+			margin: 0 0 0.35rem;
+			font-size: 1.6rem;
+		}
+
+		p {
+			margin: 0;
+			color: var(--app-color-text-muted);
+		}
+	}
+
+	.profile-avatar {
+		width: 4rem;
+		height: 4rem;
+		display: grid;
+		place-items: center;
+		background: var(--app-color-accent-soft);
+		color: var(--app-color-accent-contrast);
+		font-size: 1.4rem;
+		font-weight: 800;
+		border: 1px solid var(--app-color-accent-contrast-border);
+	}
+
+	.profile-bio,
+	.profile-form,
+	.profile-field,
+	.profile-content {
 		display: grid;
 		gap: 0.9rem;
 	}
 
-	.bio {
-		margin: 1rem 0 1.2rem;
+	.profile-bio,
+	.profile-copy {
+		margin: 0;
+		color: var(--app-color-text-muted);
+	}
+
+	.profile-field {
+		label {
+			font-size: 1rem;
+			font-weight: 600;
+		}
+	}
+
+	.profile-panel-topline {
+		display: flex;
+		justify-content: space-between;
+		align-items: end;
+		gap: 1rem;
+		flex-wrap: wrap;
+		margin-bottom: 1rem;
+
+		.app-section-title {
+			margin-bottom: 0;
+		}
+	}
+
+	.profile-filter-row {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+	}
+
+	.profile-subtitle {
+		margin: 0;
+		font-size: 1.45rem;
+	}
+
+	.profile-table {
+		margin: 0;
+	}
+
+	.profile-table-compact {
+		margin-bottom: 0;
+	}
+
+	.profile-empty-row {
+		color: var(--app-color-text-muted);
 	}
 </style>

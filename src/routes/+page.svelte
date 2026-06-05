@@ -129,12 +129,12 @@
 					/>
 				</div>
 
-				<button class="btn btn-success w-100" type="submit" disabled={submitting}>
+				<button class="btn btn-success app-button-block" type="submit" disabled={submitting}>
 					{mode === 'login' ? 'Einloggen' : 'Account erstellen'}
 				</button>
 
 				{#if message}
-					<div class="alert alert-success py-2 mb-0">{message}</div>
+					<div class="alert alert-success app-inline-alert">{message}</div>
 				{/if}
 			</form>
 
@@ -165,21 +165,21 @@
 		gap: 1.5rem;
 	}
 
-	.landing-panel {
-		padding: 3rem;
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
+		.landing-panel {
+			padding: 3rem;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
 
 		.landing-title {
 			margin: 0 0 1.5rem;
 			max-width: none;
 		}
 
-		.landing-copy {
-			font-size: 1.5rem;
-			color: var(--app-muted);
-		}
+			.landing-copy {
+				font-size: 1.5rem;
+				color: var(--app-color-text-muted);
+			}
 
 		.landing-feature-grid {
 			display: grid;
@@ -188,16 +188,22 @@
 			align-items: stretch;
 		}
 
-		.landing-feature-card {
-			padding: 1rem;
-			display: grid;
-			align-content: start;
-			gap: 1rem;
+			.landing-feature-card {
+				padding: 1rem;
+				display: grid;
+				align-content: start;
+				gap: 1rem;
 
-			h2, p {
-				word-break: break-all;
+				h2 {
+					margin: 0;
+				}
+
+				p {
+					margin: 0;
+					color: var(--app-color-text-muted);
+					line-height: 1.5;
+				}
 			}
-		}
 
 		.landing-switch {
 			display: grid;
@@ -207,15 +213,15 @@
 
 		.landing-switch-button {
 			min-height: 4rem;
-			border: 1px solid var(--app-line);
-			background: #0b0f0c;
-			color: var(--app-text);
+			border: 1px solid var(--app-color-border);
+			background: var(--app-color-surface-deep);
+			color: var(--app-color-text);
 			font-size: 1.3rem;
 			font-weight: 600;
 
 			&.active {
-				background: rgba(var(--bs-success-rgb), 0.18);
-				border-color: rgba(var(--bs-success-rgb), 0.65);
+				background: var(--app-color-accent-fill-strong);
+				border-color: var(--app-color-accent-border-strong);
 			}
 		}
 
@@ -228,22 +234,17 @@
 				display: grid;
 				gap: 0.5rem;
 
-				input {
-					background: var(--app-muted);
-					color: black !important;
-				}
-
 				label {
-					color: var(--bs-body-color);
+					color: var(--app-color-text);
 					font-size: 1.18rem;
 					font-weight: 600;
 				}
 			}
 		}
 
-		.landing-demo-card {
-			padding: 1.7rem;
-			margin-top: auto;
+			.landing-demo-card {
+				padding: 1.7rem;
+				margin-top: auto;
 
 			.landing-demo-title {
 				font-size: 1.3rem;
@@ -253,7 +254,7 @@
 
 			.landing-demo-copy {
 				font-size: 1.18rem;
-				color: var(--app-muted);
+				color: var(--app-color-text-muted);
 			}
 		}
 	}

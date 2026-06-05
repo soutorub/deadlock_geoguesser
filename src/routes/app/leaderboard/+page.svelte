@@ -36,48 +36,45 @@
 	<title>Leaderboard | Deadlock GeoGuesser</title>
 </svelte:head>
 
-<div class="card border-success-subtle shadow-sm app-panel-card mb-4">
-	<div class="card-body p-4">
-		<div class="d-flex justify-content-between align-items-center gap-3 flex-wrap">
-			<div>
-				<p class="text-uppercase small fw-semibold text-success mb-1">Global Highscore</p>
-				<h2 class="h4 mb-0">Modus filtern</h2>
-			</div>
-			<div class="d-flex gap-2 flex-wrap">
-				<select class="form-select" bind:value={selectedRoundCount}>
-					<option value="all">Alle Bildanzahlen</option>
-					{#each roundCounts as count}
-						<option value={String(count)}>{count} Bilder</option>
-					{/each}
-				</select>
-				<select class="form-select" bind:value={selectedTimer}>
-					<option value="all">Alle Timer</option>
-					{#each timers as timer}
-						<option value={String(timer)}>{timerLabel(timer)}</option>
-					{/each}
-				</select>
-			</div>
+<section class="app-panel-card leaderboard-panel leaderboard-filter-panel">
+	<div class="leaderboard-panel-topline">
+		<div>
+			<p class="app-eyebrow">Global Highscore</p>
+			<h2 class="app-section-title">Modus filtern</h2>
+		</div>
+		<div class="leaderboard-filter-row">
+			<select class="form-select" bind:value={selectedRoundCount}>
+				<option value="all">Alle Bildanzahlen</option>
+				{#each roundCounts as count}
+					<option value={String(count)}>{count} Bilder</option>
+				{/each}
+			</select>
+			<select class="form-select" bind:value={selectedTimer}>
+				<option value="all">Alle Timer</option>
+				{#each timers as timer}
+					<option value={String(timer)}>{timerLabel(timer)}</option>
+				{/each}
+			</select>
 		</div>
 	</div>
-</div>
+</section>
 
-<section class="card border-success-subtle shadow-sm app-panel-card">
-	<div class="card-body p-4">
-		<div class="d-flex justify-content-between align-items-end gap-3 flex-wrap mb-3">
-			<div>
-				<p class="text-uppercase small fw-semibold text-success mb-1">Global Highscore</p>
-				<h2 class="h4 mb-0">Passende Spiele</h2>
-			</div>
-			<p class="small text-body-secondary mb-0">
-				Angezeigt werden nur Runden für {matchingGamesLabel}.
-			</p>
+<section class="app-panel-card leaderboard-panel">
+	<div class="leaderboard-panel-topline">
+		<div>
+			<p class="app-eyebrow">Global Highscore</p>
+			<h2 class="app-section-title">Passende Spiele</h2>
 		</div>
+		<p class="leaderboard-copy">
+			Angezeigt werden nur Runden für {matchingGamesLabel}.
+		</p>
+	</div>
 
 		{#if filteredScores.length}
 			<Podium scores={topThreeScores} />
 
-			<div class="table-responsive mt-4">
-				<table class="table align-middle mb-0">
+			<div class="app-table-wrap">
+				<table class="table leaderboard-table">
 					<thead>
 						<tr>
 							<th>Rang</th>
@@ -101,11 +98,50 @@
 				</table>
 			</div>
 		{:else}
-			<div class="card border-success-subtle app-stat-card">
-					<div class="card-body text-body-secondary">
-						Keine Highscore-Einträge für den ausgewählten Filter.
-					</div>
+			<div class="app-stat-card leaderboard-empty-state">
+				Keine Highscore-Einträge für den ausgewählten Filter.
 			</div>
 		{/if}
-	</div>
 </section>
+
+<style>
+	.leaderboard-panel {
+		padding: 1.8rem;
+	}
+
+	.leaderboard-filter-panel {
+		margin-bottom: 1.35rem;
+	}
+
+	.leaderboard-panel-topline {
+		display: flex;
+		justify-content: space-between;
+		align-items: end;
+		gap: 1rem;
+		flex-wrap: wrap;
+
+		.app-section-title {
+			margin-bottom: 0;
+		}
+	}
+
+	.leaderboard-filter-row {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+	}
+
+	.leaderboard-copy {
+		margin: 0;
+		color: var(--app-color-text-muted);
+	}
+
+	.leaderboard-empty-state {
+		padding: 1.2rem;
+		color: var(--app-color-text-muted);
+	}
+
+	.leaderboard-table {
+		margin: 0;
+	}
+</style>

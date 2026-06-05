@@ -73,7 +73,7 @@
 		min-width: 28rem;
 		border-radius: 999px;
 		overflow: hidden;
-		border: 1px solid rgba(199, 211, 111, 0.18);
+		border: 1px solid var(--app-color-accent-fill-strong);
 		background-image:var(--map-image);
 		background-position: center;
 		background-repeat: no-repeat;
@@ -92,7 +92,7 @@
 		width: 0.9rem;
 		height: 0.9rem;
 		border-radius: 999px;
-		border: 1px solid rgba(11, 14, 12, 0.6);
+		border: 1px solid var(--app-color-accent-contrast-border);
 	}
 
 	.guess {

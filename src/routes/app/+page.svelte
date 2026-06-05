@@ -78,7 +78,7 @@
 					<button
 						type="button"
 						class:selected={roundCount === option}
-						class="btn border-success-subtle text-light home-chip"
+						class="btn home-chip"
 						onclick={() => (roundCount = option)}
 					>
 						{option}
@@ -94,7 +94,7 @@
 					<button
 						type="button"
 						class:selected={timerSeconds === option}
-						class="btn border-success-subtle text-light home-chip"
+						class="btn home-chip"
 						onclick={() => (timerSeconds = option)}
 					>
 						{option === 60 ? '1 min' : `${option} sek`}
@@ -111,12 +111,12 @@
 		</div>
 
 		<div class="home-action-group">
-			<button class="btn btn-success w-100" type="button" onclick={startGame} disabled={starting}>
+			<button class="btn btn-success app-button-block" type="button" onclick={startGame} disabled={starting}>
 				Spiel starten
 			</button>
 
 			{#if $currentGame}
-				<a class="btn btn-outline-success w-100" href="/app/game">Laufendes Spiel fortsetzen</a>
+				<a class="btn btn-outline-success app-button-block" href="/app/game">Laufendes Spiel fortsetzen</a>
 			{/if}
 		</div>
 	</aside>
@@ -137,105 +137,108 @@
 
 	.home-panel {
 		padding: 1.8rem;
-	}
 
-	.home-copy {
-		max-width: 42rem;
-		margin-bottom: 1.4rem;
-	}
+		.home-copy {
+			max-width: 42rem;
+			margin-bottom: 1.4rem;
+		}
 
-	.home-stats {
-		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: 0.9rem;
-	}
+		.home-stats {
+			display: grid;
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			gap: 0.9rem;
+		}
 
-	.home-stat {
-		padding: 1.1rem;
-	}
+		.home-stat {
+			padding: 1.1rem;
+		}
 
-	.home-stat-value {
-		font-size: clamp(2rem, 1.6vw + 1rem, 3rem);
-		line-height: 1;
-		font-weight: 800;
-		color: var(--app-accent);
-		margin-bottom: 0.45rem;
-	}
+		.home-stat-value {
+			font-size: clamp(2rem, 1.6vw + 1rem, 3rem);
+			line-height: 1;
+			font-weight: 800;
+			color: var(--app-color-accent);
+			margin-bottom: 0.45rem;
+		}
 
-	.home-stat-label {
-		font-size: 1rem;
-		color: var(--app-muted);
-	}
+		.home-stat-label {
+			font-size: 1rem;
+			color: var(--app-color-text-muted);
+		}
 
-	.home-subtitle {
-		font-size: 1.7rem;
-		margin: 0 0 1rem;
-	}
+		.home-subtitle {
+			font-size: 1.7rem;
+			margin: 0 0 1rem;
+		}
 
-	.home-steps {
-		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: 1rem;
-	}
+		.home-steps {
+			display: grid;
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			gap: 1rem;
+		}
 
-	.home-step-index {
-		font-size: 1rem;
-		color: var(--app-muted);
-		margin-bottom: 0.4rem;
-	}
+		.home-step-index {
+			font-size: 1rem;
+			color: var(--app-color-text-muted);
+			margin-bottom: 0.4rem;
+		}
 
-	.home-step-text {
-		font-size: 1rem;
-		font-weight: 700;
-		line-height: 1.4;
+		.home-step-text {
+			font-size: 1rem;
+			font-weight: 700;
+			line-height: 1.4;
+		}
 	}
 
 	.home-side-panel {
 		display: grid;
 		align-content: start;
 		gap: 1.5rem;
-	}
 
-	.home-option-group {
-		display: grid;
-		gap: 0.7rem;
-	}
+		.home-option-group {
+			display: grid;
+			gap: 0.7rem;
+		}
 
-	.home-option-label {
-		font-size: 1rem;
-		font-weight: 700;
-	}
+		.home-option-label {
+			font-size: 1rem;
+			font-weight: 700;
+		}
 
-	.home-option-row {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.7rem;
-	}
+		.home-option-row {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.7rem;
+		}
 
-	.home-chip {
-		min-width: 5rem;
-	}
+		.home-chip {
+			min-width: 5rem;
+			background: var(--app-color-surface-deep);
+			border: 1px solid var(--app-color-border);
+			color: var(--app-color-text);
 
-	.home-chip.selected {
-		background-color: rgba(199, 211, 111, 0.18);
-		color: #eff5e8;
-		border-color: rgba(199, 211, 111, 0.55);
-	}
+			&.selected {
+				background-color: var(--app-color-accent-fill-strong);
+				color: var(--app-color-highlight);
+				border-color: var(--app-color-accent-border-strong);
+			}
+		}
 
-	.home-mode-card {
-		padding: 1.2rem;
-		display: grid;
-		gap: 0.75rem;
-	}
+		.home-mode-card {
+			padding: 1.2rem;
+			display: grid;
+			gap: 0.75rem;
+		}
 
-	.home-mode-copy {
-		margin: 0;
-		font-size: 1rem;
-		color: var(--app-muted);
-	}
+		.home-mode-copy {
+			margin: 0;
+			font-size: 1rem;
+			color: var(--app-color-text-muted);
+		}
 
-	.home-action-group {
-		display: grid;
-		gap: 0.75rem;
+		.home-action-group {
+			display: grid;
+			gap: 0.75rem;
+		}
 	}
 </style>

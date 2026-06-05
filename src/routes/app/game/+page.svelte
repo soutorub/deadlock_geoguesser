@@ -90,11 +90,11 @@
 			<section class="app-panel-card game-panel game-main-panel">
 				<div class="game-topline">
 					<ModeBadge mode={$currentGame.mode} />
-					<div class="badge text-bg-dark border border-success-subtle fs-6">{remainingSeconds}s</div>
+					<div class="game-timer-badge">{remainingSeconds}s</div>
 				</div>
 
 				<div class="game-copy-block">
-					<p >Bild {$currentGame.roundIndex + 1} / {$currentGame.images.length}</p>
+					<p class="app-eyebrow game-round-index">Bild {$currentGame.roundIndex + 1} / {$currentGame.images.length}</p>
 					<h2>Bild {$currentGame.roundIndex + 1}</h2>
 				</div>
 
@@ -106,7 +106,7 @@
 			<section class="app-panel-card game-panel game-side-panel">
 				<div>
 					<h3>Map und Guess</h3>
-					<p>
+					<p class="game-map-intro">
 						Setze deinen Pin auf die Deadlock-Map. Je näher dein Guess, desto höher der Score.
 					</p>
 				</div>
@@ -121,19 +121,19 @@
 
 				<div class="app-stat-card game-pin-card">
 					{#if selectedGuess}
-						<p class="mb-0">Dein Pin: X {selectedGuess.x}% · Y {selectedGuess.y}%</p>
+						<p class="game-pin-copy">Dein Pin: X {selectedGuess.x}% · Y {selectedGuess.y}%</p>
 					{:else}
-						<p class="mb-0 text-body-secondary">
+						<p class="game-pin-copy game-pin-empty">
 							Noch kein Pin gesetzt. Klick auf die Karte, um deine Vermutung zu platzieren.
 						</p>
 					{/if}
 				</div>
 
 				<div class="game-action-group">
-					<button class="btn btn-success w-100" type="button" onclick={() => void submitGuess()}>
+					<button class="btn btn-success app-button-block" type="button" onclick={() => void submitGuess()}>
 						Guess bestätigen
 					</button>
-					<button class="btn btn-outline-success w-100" type="button" onclick={() => void submitGuess()}>
+					<button class="btn btn-outline-success app-button-block" type="button" onclick={() => void submitGuess()}>
 						Überspringen
 					</button>
 				</div>
@@ -141,9 +141,9 @@
 		</div>
 	{:else}
 		<section class="app-panel-card game-finished-panel">
-			<p>Runde abgeschlossen</p>
+			<p class="app-eyebrow">Runde abgeschlossen</p>
 			<h2>{$currentGame.finalScore} Gesamtpunkte</h2>
-			<p>
+			<p class="game-finished-copy">
 				Deine Scores wurden gespeichert und fliessen jetzt sowohl ins Profil als auch in die
 				Highscore-Ansicht ein.
 			</p>
@@ -156,7 +156,7 @@
 					<div class="app-stat-card game-result-card">
 						<strong>#{index + 1} {result.imageName}</strong>
 						<p>{result.score} Punkte</p>
-						<span class="text-body-secondary">Distanz: {result.distance}</span>
+						<span class="game-result-meta">Distanz: {result.distance}</span>
 					</div>
 				{/each}
 			</div>
@@ -185,6 +185,17 @@
 	.game-main-panel {
 		display: grid;
 		gap: 1.35rem;
+
+		.art-frame {
+			border: 1px solid var(--app-color-border-soft);
+			display: grid;
+			place-items: center;
+		}
+
+		.art-image {
+			width: 100%;
+			height: 100%;
+		}
 	}
 
 	.game-topline {
@@ -195,22 +206,27 @@
 		flex-wrap: wrap;
 	}
 
+	.game-timer-badge {
+		padding: 0.45rem 0.7rem;
+		border: 1px solid var(--app-color-accent-border-strong);
+		background: var(--app-color-surface-deep);
+		font-size: 1rem;
+		font-weight: 700;
+	}
+
 	.game-copy-block {
 		display: grid;
 		gap: 0.6rem;
+
+		h2 {
+			margin: 0;
+		}
 	}
 
-	.art-frame {
-		border-radius: 0;
-		border: 1px solid rgba(209, 232, 183, 0.12);
-		display: grid;
-		place-items: center;
+	.game-round-index {
+		margin: 0;
 	}
 
-	.art-image {
-		width: 100%;
-		height: 100%;
-	}
 	.game-map-wrap {
 		display: grid;
 		width: 100%;
@@ -219,7 +235,17 @@
 
 	.game-pin-card {
 		padding: 1rem 1.1rem;
+	}
+
+	.game-pin-copy {
+		margin: 0;
 		font-size: 1rem;
+	}
+
+	.game-pin-empty,
+	.game-map-intro,
+	.game-finished-copy {
+		color: var(--app-color-text-muted);
 	}
 
 	.game-action-group {
@@ -244,6 +270,10 @@
 	.game-result-card p,
 	.game-result-card span {
 		margin: 0;
+	}
+
+	.game-result-meta {
+		color: var(--app-color-text-muted);
 	}
 
 	.game-finished-actions {

@@ -12,9 +12,9 @@
 	.mode-badge {
 		padding: 0.5rem 0.7rem;
 		font-size: 1rem;
-		background: rgba(199, 211, 111, 0.12);
-		color: #e9efc4;
-		border: 1px solid rgba(199, 211, 111, 0.34);
+		background: var(--app-color-accent-fill);
+		color: var(--app-color-highlight);
+		border: 1px solid var(--app-color-accent-border);
 		font-weight: 700;
 	}
 </style>
