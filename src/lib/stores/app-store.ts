@@ -250,7 +250,7 @@ function createAppStore() {
 				const distance = guess ? distanceBetween(guess, image.actual) : MAP_DIAGONAL;
 				const result: RoundResult = {
 					imageId: image.id,
-					imageTitle: image.title,
+					imageName: image.name,
 					distance: Math.round(distance * 10) / 10,
 					score: guess ? scoreFromDistance(distance) : 0,
 					guess,

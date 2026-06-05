@@ -8,6 +8,7 @@
 	export let revealActual = false;
 	export let interactive = true;
 	export let onGuess: ((point: Point) => void) | null = null;
+	export let mapImageUrl: string | null = '/deadlock_minimap.png';
 
 	function handleClick(event: MouseEvent) {
 		if (!interactive || !onGuess) {
@@ -16,8 +17,19 @@
 
 		const target = event.currentTarget as HTMLDivElement;
 		const rect = target.getBoundingClientRect();
-		const x = ((event.clientX - rect.left) / rect.width) * 100;
-		const y = ((event.clientY - rect.top) / rect.height) * 100;
+		const localX = event.clientX - rect.left;
+		const localY = event.clientY - rect.top;
+		const centerX = rect.width / 2;
+		const centerY = rect.height / 2;
+		const radius = Math.min(rect.width, rect.height) / 2;
+		const distanceFromCenter = Math.hypot(localX - centerX, localY - centerY);
+
+		if (distanceFromCenter > radius) {
+			return;
+		}
+
+		const x = (localX / rect.width) * 100;
+		const y = (localY / rect.height) * 100;
 
 		onGuess({
 			x: Math.max(0, Math.min(100, Math.round(x * 10) / 10)),
@@ -26,63 +38,73 @@
 	}
 </script>
 
-<button
-	type="button"
-	class:interactive
-	class="map"
-	disabled={!interactive}
-	onclick={handleClick}
->
-	<div class="sector canal">Canal</div>
-	<div class="sector factory">Factory</div>
-	<div class="sector skyline">Skyline</div>
-	<div class="sector rail">Rail</div>
-	<div class="sector mid">Mid</div>
-	<div class="sector docks">Docks</div>
-	<div class="sector archive">Archive</div>
-	<div class="sector citadel">Citadel</div>
+<div class="map-shell">
+	<button
+		type="button"
+		class:interactive
+		class="map-surface"
+		style={`--map-image: ${mapImageUrl ? `url('${mapImageUrl}')` : 'none'}`}
+		disabled={!interactive}
+		onclick={handleClick}
+	>
+		{#if selectedGuess}
+			<div class="marker guess" style={`left:${selectedGuess.x}%; top:${selectedGuess.y}%`}>
+				<span>Du</span>
+			</div>
+		{/if}
 
-	{#if selectedGuess}
-		<div class="marker guess" style={`left:${selectedGuess.x}%; top:${selectedGuess.y}%`}>
-			<span>Du</span>
-		</div>
-	{/if}
-
-	{#if revealActual && actualPoint}
-		<div class="marker actual" style={`left:${actualPoint.x}%; top:${actualPoint.y}%`}>
-			<span>Ziel</span>
-		</div>
-	{/if}
-</button>
+		{#if revealActual && actualPoint}
+			<div class="marker actual" style={`left:${actualPoint.x}%; top:${actualPoint.y}%`}>
+				<span>Ziel</span>
+			</div>
+		{/if}
+	</button>
+</div>
 
 <style>
-	.map {
+	.map-shell {
+		display: grid;
+		place-items: center;
+		width: 100%;
+		min-height: 22rem;
+	}
+
+	.map-surface {
 		position: relative;
 		display: block;
-		width: 100%;
-		min-height: 280px;
-		border-radius: 0;
+		width: 70%;
+		max-width: 32rem;
+		aspect-ratio: 1;
+		min-width: 18rem;
+		border-radius: 999px;
 		overflow: hidden;
 		border: 1px solid rgba(199, 211, 111, 0.18);
-		background:
-			linear-gradient(160deg, rgba(28, 36, 33, 0.98), rgba(18, 23, 20, 0.98)),
-			linear-gradient(90deg, transparent 49%, rgba(255, 255, 255, 0.08) 50%, transparent 51%),
-			linear-gradient(transparent 49%, rgba(255, 255, 255, 0.08) 50%, transparent 51%);
+		background-image:
+			linear-gradient(rgba(7, 9, 8, 0.12), rgba(7, 9, 8, 0.12)),
+			var(--map-image),
+			linear-gradient(90deg, transparent 49.4%, rgba(255, 255, 255, 0.12) 50%, transparent 50.6%),
+			linear-gradient(transparent 49.4%, rgba(255, 255, 255, 0.12) 50%, transparent 50.6%),
+			linear-gradient(90deg, transparent 49.7%, rgba(255, 255, 255, 0.24) 50%, transparent 50.3%),
+			linear-gradient(transparent 49.7%, rgba(255, 255, 255, 0.24) 50%, transparent 50.3%),
+			linear-gradient(160deg, rgba(28, 36, 33, 0.98), rgba(18, 23, 20, 0.98));
+		background-position: center, center, center, center, center, center, center;
+		background-size: 100% 100%, contain, 5% 5%, 5% 5%, 10% 10%, 10% 10%, cover;
+		background-repeat: no-repeat;
 		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
 	}
 
-	.map::before {
+	.map-surface::before {
 		content: '';
 		position: absolute;
 		inset: 0;
 		background:
-			linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-			linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-		background-size: 20% 20%;
+			linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+			linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+		background-size: 5% 5%;
 		pointer-events: none;
 	}
 
-	.map:disabled {
+	.map-surface:disabled {
 		opacity: 1;
 	}
 
@@ -90,68 +112,19 @@
 		cursor: crosshair;
 	}
 
-	.sector {
-		position: absolute;
-		padding: 0.35rem 0.55rem;
-		border-radius: 0;
-		font-size: 0.82rem;
-		color: rgba(233, 240, 231, 0.82);
-		background: rgba(8, 10, 9, 0.45);
-		border: 1px solid rgba(209, 232, 183, 0.08);
-	}
-
-	.canal {
-		left: 8%;
-		top: 12%;
-	}
-
-	.factory {
-		left: 36%;
-		top: 8%;
-	}
-
-	.skyline {
-		right: 10%;
-		top: 15%;
-	}
-
-	.rail {
-		left: 12%;
-		top: 48%;
-	}
-
-	.mid {
-		left: 44%;
-		top: 42%;
-	}
-
-	.docks {
-		right: 8%;
-		top: 54%;
-	}
-
-	.archive {
-		left: 24%;
-		bottom: 12%;
-	}
-
-	.citadel {
-		right: 12%;
-		bottom: 10%;
-	}
-
 	.marker {
 		position: absolute;
 		transform: translate(-50%, -50%);
-		width: 1.15rem;
-		height: 1.15rem;
-		border-radius: 0;
-		box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.09);
+		width: 0.9rem;
+		height: 0.9rem;
+		border-radius: 999px;
+		box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.11);
+		border: 1px solid rgba(11, 14, 12, 0.6);
 	}
 
 	.marker span {
 		position: absolute;
-		top: 1.4rem;
+		top: 1.2rem;
 		left: 50%;
 		transform: translateX(-50%);
 		white-space: nowrap;
@@ -167,5 +140,11 @@
 
 	.actual {
 		background: #52d3a4;
+	}
+
+	@media (max-width: 900px) {
+		.map-surface {
+			width: 82%;
+		}
 	}
 </style>

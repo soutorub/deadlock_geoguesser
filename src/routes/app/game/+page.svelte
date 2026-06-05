@@ -95,13 +95,11 @@
 
 				<div class="game-copy-block">
 					<p class="app-eyebrow">Bild {$currentGame.roundIndex + 1} / {$currentGame.images.length}</p>
-					<h2 class="game-title">{round.title}</h2>
-					<p class="game-description">{round.description}</p>
-					<p class="game-hint">{round.hint}</p>
+					<h2 class="game-title">{round.name}</h2>
 				</div>
 
 				<div class="art-frame">
-					<img class="img-fluid w-100 h-100 object-fit-cover" src={round.imageUrl} alt={round.title} />
+					<img class="img-fluid w-100 h-100 object-fit-cover" src={round.imageUrl} alt={round.name} />
 				</div>
 			</section>
 
@@ -156,7 +154,7 @@
 			<div class="game-results-grid">
 				{#each $currentGame.results as result, index}
 					<div class="app-stat-card game-result-card">
-						<strong>#{index + 1} {result.imageTitle}</strong>
+						<strong>#{index + 1} {result.imageName}</strong>
 						<p>{result.score} Punkte</p>
 						<span class="text-body-secondary">Distanz: {result.distance}</span>
 					</div>
@@ -205,21 +203,6 @@
 	.game-title {
 		font-size: 2rem;
 		margin: 0;
-	}
-
-	.game-description,
-	.game-hint {
-		margin: 0;
-	}
-
-	.game-description {
-		font-size: 1.08rem;
-		color: var(--app-muted);
-	}
-
-	.game-hint {
-		font-size: 1rem;
-		color: rgba(139, 197, 63, 0.8);
 	}
 
 	.art-frame {

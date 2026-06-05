@@ -13,20 +13,24 @@ export type GameMode = {
 
 export type RoundImage = {
 	id: string;
-	title: string;
-	district: string;
-	hint: string;
-	description: string;
+	name: string;
 	imageUrl: string;
 	actual: Point;
 };
 
 export type RoundResult = {
 	imageId: string;
-	imageTitle: string;
+	imageName: string;
 	distance: number;
 	score: number;
 	guess: Point | null;
+	actual: Point;
+};
+
+export type PictureRecord = {
+	id: string;
+	name: string;
+	imageUrl: string;
 	actual: Point;
 };
 

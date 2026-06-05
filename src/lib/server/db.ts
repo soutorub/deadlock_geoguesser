@@ -1,8 +1,9 @@
-import { ObjectId } from 'mongodb';
+import { Binary, ObjectId } from 'mongodb';
 import { getDatabase } from '$lib/server/mongodb';
 import type {
 	BootstrapPayload,
 	ModeStats,
+	PictureRecord,
 	RoundImage,
 	RoundResult,
 	ScoreEntry,
@@ -22,11 +23,9 @@ type UserDocument = {
 
 type PictureDocument = {
 	_id?: ObjectId;
-	title: string;
-	district: string;
-	hint: string;
-	description: string;
-	imageUrl: string;
+	name: string;
+	image: Binary;
+	mimeType: string;
 	actual: { x: number; y: number };
 	createdAt: Date;
 	updatedAt: Date;
@@ -119,13 +118,23 @@ function toScoreEntry(document: ScoreDocument): ScoreEntry {
 }
 
 function toRoundImage(document: PictureDocument): RoundImage {
+	const id = document._id?.toString() ?? '';
+
 	return {
-		id: document._id?.toString() ?? '',
-		title: document.title,
-		district: document.district,
-		hint: document.hint,
-		description: document.description,
-		imageUrl: document.imageUrl,
+		id,
+		name: document.name,
+		imageUrl: `/api/pictures/${id}/image`,
+		actual: document.actual
+	};
+}
+
+function toPictureRecord(document: PictureDocument): PictureRecord {
+	const id = document._id?.toString() ?? '';
+
+	return {
+		id,
+		name: document.name,
+		imageUrl: `/api/pictures/${id}/image`,
 		actual: document.actual
 	};
 }
@@ -265,6 +274,52 @@ export async function getRandomPictures(count: number) {
 	const documents = await pictures.aggregate([{ $sample: { size: count } }]).toArray();
 
 	return documents.map((document) => toRoundImage(document as PictureDocument));
+}
+
+export async function listPictures() {
+	const { pictures } = await getCollections();
+	const documents = await pictures.find().sort({ name: 1 }).toArray();
+
+	return documents.map((document) => toPictureRecord(document));
+}
+
+export async function getPictureDocumentById(pictureId: string) {
+	const { pictures } = await getCollections();
+	return pictures.findOne({ _id: new ObjectId(pictureId) });
+}
+
+export async function updatePicture(
+	pictureId: string,
+	payload: Partial<{
+		name: string;
+		actual: { x: number; y: number };
+	}>
+) {
+	const { pictures } = await getCollections();
+	const updateData: Record<string, unknown> = {
+		updatedAt: new Date()
+	};
+
+	if (typeof payload.name === 'string') {
+		updateData.name = payload.name;
+	}
+
+	if (payload.actual) {
+		updateData.actual = {
+			x: Math.max(0, Math.min(100, Number(payload.actual.x))),
+			y: Math.max(0, Math.min(100, Number(payload.actual.y)))
+		};
+	}
+
+	await pictures.updateOne(
+		{ _id: new ObjectId(pictureId) },
+		{
+			$set: updateData
+		}
+	);
+
+	const updated = await pictures.findOne({ _id: new ObjectId(pictureId) });
+	return updated ? toPictureRecord(updated) : null;
 }
 
 export async function buildBootstrap(userId: string): Promise<BootstrapPayload> {
