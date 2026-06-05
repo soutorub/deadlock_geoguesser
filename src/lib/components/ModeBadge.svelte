@@ -10,8 +10,8 @@
 
 <style>
 	.mode-badge {
-		padding: 0.42rem 0.7rem;
-		font-size: 0.88rem;
+		padding: 0.5rem 0.7rem;
+		font-size: 1rem;
 		background: rgba(199, 211, 111, 0.12);
 		color: #e9efc4;
 		border: 1px solid rgba(199, 211, 111, 0.34);

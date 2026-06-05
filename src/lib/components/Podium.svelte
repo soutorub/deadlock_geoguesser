@@ -44,10 +44,6 @@
 		align-items: end;
 	}
 
-	.slot {
-		text-align: center;
-	}
-
 	.avatar,
 	.placeholder {
 		width: 3.2rem;
@@ -116,16 +112,5 @@
 	.rank-3 .avatar {
 		background: #b26d3e;
 		color: #2a1308;
-	}
-
-	@media (max-width: 720px) {
-		.podium {
-			grid-template-columns: 1fr;
-			align-items: stretch;
-		}
-
-		.pillar {
-			border-radius: 0;
-		}
 	}
 </style>

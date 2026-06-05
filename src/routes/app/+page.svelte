@@ -179,13 +179,13 @@
 	}
 
 	.home-step-index {
-		font-size: 0.98rem;
+		font-size: 1rem;
 		color: var(--app-muted);
-		margin-bottom: 0.35rem;
+		margin-bottom: 0.4rem;
 	}
 
 	.home-step-text {
-		font-size: 1.12rem;
+		font-size: 1rem;
 		font-weight: 700;
 		line-height: 1.4;
 	}
@@ -193,7 +193,7 @@
 	.home-side-panel {
 		display: grid;
 		align-content: start;
-		gap: 1.45rem;
+		gap: 1.5rem;
 	}
 
 	.home-option-group {
@@ -202,7 +202,7 @@
 	}
 
 	.home-option-label {
-		font-size: 1.05rem;
+		font-size: 1rem;
 		font-weight: 700;
 	}
 
@@ -213,7 +213,7 @@
 	}
 
 	.home-chip {
-		min-width: 4.7rem;
+		min-width: 5rem;
 	}
 
 	.home-chip.selected {
@@ -237,22 +237,5 @@
 	.home-action-group {
 		display: grid;
 		gap: 0.75rem;
-	}
-
-	@media (max-width: 1100px) {
-		.home-grid {
-			grid-template-columns: 1fr;
-		}
-	}
-
-	@media (max-width: 760px) {
-		.home-panel {
-			padding: 1.2rem;
-		}
-
-		.home-stats,
-		.home-steps {
-			grid-template-columns: 1fr;
-		}
 	}
 </style>

@@ -41,17 +41,6 @@
 
 			body {
 				min-height: 100vh;
-				background:
-					linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-					linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-					radial-gradient(circle at top left, rgba(139, 197, 63, 0.08), transparent 26%),
-					linear-gradient(180deg, #090c0a 0%, #0c110d 50%, #090b09 100%);
-				background-size:
-					24px 24px,
-					24px 24px,
-					auto,
-					auto;
-				background-attachment: fixed;
 				font-family:
 					"IBM Plex Sans",
 					"Segoe UI",
@@ -76,39 +65,6 @@
 				border-radius: 0;
 			}
 
-			.card,
-			.table,
-			.form-select,
-			.form-control,
-			.btn,
-			.nav-pills .nav-link,
-			.badge,
-			.alert {
-				box-shadow: none !important;
-			}
-
-			.form-control,
-			.form-select {
-				background-color: #0b0f0c;
-				color: var(--app-text);
-				border-color: var(--app-line);
-				min-height: 4rem;
-				padding: 1rem 1.15rem;
-				font-size: 1.22rem;
-			}
-
-			.form-control:focus,
-			.form-select:focus {
-				background-color: #0b0f0c;
-				color: #f5f8f6;
-				border-color: var(--app-line-strong);
-				box-shadow: none;
-			}
-
-			.form-control::placeholder {
-				color: rgba(156, 171, 162, 0.58);
-			}
-
 			.table {
 				--bs-table-bg: transparent;
 				--bs-table-color: var(--app-text);
@@ -116,19 +72,10 @@
 				font-size: 1rem;
 			}
 
-			.bg-dark-subtle {
-				background-color: var(--app-panel-soft) !important;
-			}
-
-			.text-muted,
-			.text-body-secondary {
-				color: var(--app-muted) !important;
-			}
 
 			.app-panel-card {
 				background: rgba(16, 21, 17, 0.92);
 				border: 1px solid var(--app-line) !important;
-				box-shadow: var(--app-shadow);
 			}
 
 			.app-stat-card {
@@ -173,31 +120,10 @@
 				font-size: 0.95em;
 			}
 
-			.app-stage {
-				width: min(98vw, 1760px);
-				margin: 0 auto;
-				padding: clamp(1.6rem, 2.5vw, 3rem);
-			}
-
-			.app-section-title {
-				font-size: clamp(1.95rem, 1.2vw + 1.3rem, 2.7rem);
-				line-height: 1.05;
-				margin-bottom: 0.75rem;
-			}
-
 			.app-eyebrow {
-				font-size: 0.95rem;
 				text-transform: uppercase;
-				letter-spacing: 0.08em;
 				font-weight: 700;
 				color: var(--app-accent);
-				margin-bottom: 0.5rem;
-			}
-
-			.app-copy {
-				font-size: 1.22rem;
-				line-height: 1.5;
-				color: var(--app-muted);
 			}
 		</style>
 	</head>

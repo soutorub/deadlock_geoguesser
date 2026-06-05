@@ -13,7 +13,8 @@ import type {
 
 const STORAGE_KEY = 'deadlock-geoguesser-active-user';
 const MAP_SIZE = 100;
-const MAP_DIAGONAL = Math.hypot(MAP_SIZE, MAP_SIZE);
+const SCORE_BOX_RANGE = 10;
+const MAX_ROUND_SCORE = 5000;
 
 const defaultState: AppState = {
 	currentUser: null,
@@ -26,8 +27,17 @@ function modeKey(roundCount: number, timerSeconds: number) {
 	return `${roundCount}-${timerSeconds}`;
 }
 
-function scoreFromDistance(distance: number) {
-	return Math.max(0, Math.round(5000 * (1 - distance / MAP_DIAGONAL)));
+function squareDistanceBetween(left: Point, right: Point) {
+	return Math.max(Math.abs(left.x - right.x), Math.abs(left.y - right.y));
+}
+
+function scoreFromSquareDistance(distance: number) {
+	if (distance >= SCORE_BOX_RANGE) {
+		return 0;
+	}
+
+	const normalized = 1 - distance / SCORE_BOX_RANGE;
+	return Math.max(0, Math.round(MAX_ROUND_SCORE * normalized));
 }
 
 function distanceBetween(left: Point, right: Point) {
@@ -247,12 +257,13 @@ function createAppStore() {
 
 				const game = state.currentGame;
 				const image = game.images[game.roundIndex];
-				const distance = guess ? distanceBetween(guess, image.actual) : MAP_DIAGONAL;
+				const distance = guess ? squareDistanceBetween(guess, image.actual) : MAP_SIZE;
+				const euclideanDistance = guess ? distanceBetween(guess, image.actual) : MAP_SIZE;
 				const result: RoundResult = {
 					imageId: image.id,
 					imageName: image.name,
-					distance: Math.round(distance * 10) / 10,
-					score: guess ? scoreFromDistance(distance) : 0,
+					distance: Math.round(euclideanDistance * 10) / 10,
+					score: guess ? scoreFromSquareDistance(distance) : 0,
 					guess,
 					actual: image.actual
 				};

@@ -94,19 +94,19 @@
 				</div>
 
 				<div class="game-copy-block">
-					<p class="app-eyebrow">Bild {$currentGame.roundIndex + 1} / {$currentGame.images.length}</p>
-					<h2 class="game-title">{round.name}</h2>
+					<p >Bild {$currentGame.roundIndex + 1} / {$currentGame.images.length}</p>
+					<h2>Bild {$currentGame.roundIndex + 1}</h2>
 				</div>
 
 				<div class="art-frame">
-					<img class="img-fluid w-100 h-100 object-fit-cover" src={round.imageUrl} alt={round.name} />
+					<img class="art-image" src={round.imageUrl} alt={`Bild ${$currentGame.roundIndex + 1}`} />
 				</div>
 			</section>
 
 			<section class="app-panel-card game-panel game-side-panel">
 				<div>
-					<h3 class="game-side-title">Map und Guess</h3>
-					<p class="game-side-copy">
+					<h3>Map und Guess</h3>
+					<p>
 						Setze deinen Pin auf die Deadlock-Map. Je näher dein Guess, desto höher der Score.
 					</p>
 				</div>
@@ -141,9 +141,9 @@
 		</div>
 	{:else}
 		<section class="app-panel-card game-finished-panel">
-			<p class="app-eyebrow">Runde abgeschlossen</p>
-			<h2 class="app-section-title">{$currentGame.finalScore} Gesamtpunkte</h2>
-			<p class="app-copy">
+			<p>Runde abgeschlossen</p>
+			<h2>{$currentGame.finalScore} Gesamtpunkte</h2>
+			<p>
 				Deine Scores wurden gespeichert und fliessen jetzt sowohl ins Profil als auch in die
 				Highscore-Ansicht ein.
 			</p>
@@ -172,8 +172,8 @@
 <style>
 	.game-grid {
 		display: grid;
-		grid-template-columns: 56% 44%;
-		gap: 1rem;
+		grid-template-columns: 50% 50%;
+		gap: 1.15rem;
 		align-items: stretch;
 	}
 
@@ -200,40 +200,21 @@
 		gap: 0.6rem;
 	}
 
-	.game-title {
-		font-size: 2rem;
-		margin: 0;
-	}
-
 	.art-frame {
 		border-radius: 0;
-		overflow: hidden;
-		height: clamp(28rem, 54vh, 40rem);
-		max-height: 40rem;
 		border: 1px solid rgba(209, 232, 183, 0.12);
-	}
-
-	.game-side-panel {
 		display: grid;
-		align-content: start;
-		gap: 1rem;
+		place-items: center;
 	}
 
-	.game-side-title {
-		font-size: 1.9rem;
-		margin: 0 0 0.5rem;
+	.art-image {
+		width: 100%;
+		height: 100%;
 	}
-
-	.game-side-copy {
-		margin: 0;
-		font-size: 1.08rem;
-		color: var(--app-muted);
-		line-height: 1.45;
-	}
-
 	.game-map-wrap {
 		display: grid;
 		width: 100%;
+		padding-inline: 0.15rem;
 	}
 
 	.game-pin-card {
@@ -269,51 +250,5 @@
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.8rem;
-	}
-
-	:global(.game-map-wrap .map) {
-		min-height: 780px;
-		width: 100%;
-	}
-
-	:global(.game-map-wrap .sector) {
-		font-size: 0.96rem;
-		padding: 0.45rem 0.65rem;
-	}
-
-	:global(.game-map-wrap .marker) {
-		width: 1.35rem;
-		height: 1.35rem;
-	}
-
-	:global(.game-map-wrap .marker span) {
-		top: 1.6rem;
-		font-size: 0.82rem;
-	}
-
-	@media (max-width: 1200px) {
-		.game-grid {
-			grid-template-columns: 1fr;
-		}
-	}
-
-	@media (max-width: 820px) {
-		.game-panel,
-		.game-finished-panel {
-			padding: 1.2rem;
-		}
-
-		.art-frame {
-			height: clamp(22rem, 42vh, 28rem);
-			max-height: 28rem;
-		}
-
-		:global(.game-map-wrap .map) {
-			min-height: 480px;
-		}
-
-		.game-results-grid {
-			grid-template-columns: 1fr;
-		}
 	}
 </style>

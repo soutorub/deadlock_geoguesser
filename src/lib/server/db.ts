@@ -271,9 +271,33 @@ export async function updateUserProfile(
 
 export async function getRandomPictures(count: number) {
 	const { pictures } = await getCollections();
-	const documents = await pictures.aggregate([{ $sample: { size: count } }]).toArray();
+	const idDocuments = await pictures.find({}, { projection: { _id: 1 } }).toArray();
 
-	return documents.map((document) => toRoundImage(document as PictureDocument));
+	if (!idDocuments.length) {
+		return [];
+	}
+
+	const shuffledIds = [...idDocuments];
+
+	for (let index = shuffledIds.length - 1; index > 0; index -= 1) {
+		const swapIndex = Math.floor(Math.random() * (index + 1));
+		[shuffledIds[index], shuffledIds[swapIndex]] = [shuffledIds[swapIndex], shuffledIds[index]];
+	}
+
+	const selectedIds = shuffledIds.slice(0, Math.min(count, shuffledIds.length)).map((entry) => entry._id);
+	const documents = await pictures.find({ _id: { $in: selectedIds } }).toArray();
+	const byId = new Map(documents.map((document) => [document._id?.toString() ?? '', document]));
+
+	const orderedDocuments: PictureDocument[] = [];
+
+	for (const id of selectedIds) {
+		const document = byId.get(id.toString());
+		if (document) {
+			orderedDocuments.push(document);
+		}
+	}
+
+	return orderedDocuments.map((document) => toRoundImage(document));
 }
 
 export async function listPictures() {
