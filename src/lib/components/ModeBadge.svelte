@@ -11,7 +11,7 @@
 <style>
 	.mode-badge {
 		padding: 0.5rem 0.7rem;
-		font-size: 1rem;
+		font-size: 2rem;
 		background: var(--app-color-accent-fill);
 		color: var(--app-color-highlight);
 		border: 1px solid var(--app-color-accent-border);

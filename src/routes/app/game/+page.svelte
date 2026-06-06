@@ -210,7 +210,7 @@
 		padding: 0.45rem 0.7rem;
 		border: 1px solid var(--app-color-accent-border-strong);
 		background: var(--app-color-surface-deep);
-		font-size: 1rem;
+		font-size: 2rem;
 		font-weight: 700;
 	}
 

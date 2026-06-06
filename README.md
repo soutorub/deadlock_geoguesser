@@ -22,8 +22,7 @@ Es sollte ein klickbarer Prototyp für eine kleine Game-Webapplikation erstellt 
 
 - **Problem:** Es braucht eine visuell nachvollziehbare und technisch umsetzbare Vorlage für eine spielerische Webapplikation mit Login, Spielablauf, Profil und Leaderboard.
 - **Ziele:** Interaktiver Prototyp mit mehreren Screens, spielbarem Hauptworkflow, Speicherung von Usern und Scores in MongoDB, sowie einer klaren Grundlage für die spätere Weiterentwicklung.
-- **Primäre Zielgruppe:** Personen, die schnelle, kompetitive Runden spielen wollen und ihre Resultate mit anderen vergleichen möchten.
-- **Weitere Stakeholder [Optional]:** Lehrperson, Mitstudierende, spätere Entwicklerinnen und Entwickler des Projekts.
+- **Primäre Zielgruppe:** Personen, die schnelle, kompetitive Runden spielen wollen und ihre Resultate mit anderen vergleichen möchten. Die App ist auf Personen ausgerichtet, die das Spiel "Deadlock" bereits kennen.
 
 
 ## 2. Lösungsidee
@@ -31,27 +30,33 @@ Die Lösung ist eine SvelteKit-Webapplikation mit Bootstrap als UI-Grundlage. Na
 
 - **Kernfunktionalität:** Login und Sign up, Spielmodus wählen, Runde spielen, Score speichern, Profil anzeigen und bearbeiten, globale Highscores mit Filter.
 - **Annahmen [Optional]:** Die Nutzer verstehen den Spielablauf auch ohne komplexes Tutorial. Die statische Map reicht für einen Prototypen aus. Profile und Leaderboards sind motivierende Bestandteile des Spielkonzepts.
-- **Abgrenzung [Optional]:** Kein vollständiges Auth-System mit Sessions oder Rollen, keine interaktive Live-Map, keine produktionsreife Sicherheit, keine aufwändige Administration für Bilder oder Nutzer.
+- **Abgrenzung [Optional]:** Kein vollständiges Auth-System mit Rollen, keine zoomable / bewegbare Live-Map, keine produktionsreife Sicherheit, kein manuelles hinzufügen von Bildern durch User.
 
 ## 3. Vorgehen & Artefakte
 Die Umsetzung orientierte sich an einem phasenbasierten Vorgehen von Problemverständnis über Mockup bis zum funktionierenden Prototyp.
 
 ### 3.1 Understand & Define
-- **Zielgruppenverständnis:** Ausgangspunkt war ein einfacher Spiel-Workflow, der ohne lange Einarbeitung funktioniert. Wichtige Bestandteile waren schneller Einstieg, klarer Spielstart, sofort sichtbare Resultate und ein kompetitiver Vergleich über Highscores.
+- **Zielgruppenverständnis:** Ausgangspunkt war ein einfacher Spiel-Workflow, der ohne lange Einarbeitung funktioniert. Wichtige Bestandteile waren schneller Einstieg, klarer Spielstart, sofort sichtbare Resultate und ein kompetitiver Vergleich über Highscores. Da die Zielgruppe das Spiel "Deadlock" bereits kennt, konnten viele Details des Gameplays vorausgesetzt werden.
 - **Wesentliche Erkenntnisse:**
   - Der Einstieg muss sehr einfach sein, deshalb Login/Sign up direkt auf der Startseite.
   - Der Spielmodus soll vor dem Start klar konfigurierbar sein.
   - Profil und Highscores müssen getrennt sichtbar sein, da eigenes Abschneiden und globaler Vergleich unterschiedliche Bedürfnisse abdecken.
   - Filter für Bildanzahl und Timer sind notwendig, damit Profil- und Highscore-Ansichten nicht zu gross werden.
 
+  Ausführliches Artefakt: **Ideenfindung_Prototyping_souorub.pdf** (siehe Abgabeordner)
+
 ### 3.2 Sketch
-- **Variantenüberblick:** Es wurden früh einfache Layouts für Login, Home, Spiel, Profil und Highscores definiert.
-- **Skizzen:** Zunächst wurde ein einfacher Wireframe-Ansatz gewählt, später daraus ein klickbares Figma-Mockup mit mehreren Screens abgeleitet. Unterschiede zwischen den Varianten betrafen vor allem Navigation, Filterdarstellung und die Platzierung von Profil- und Highscore-Funktionen.
+- **Variantenüberblick:** Es wurden früh einfache Skizzen für Login, Home, Spiel, Profil und Highscores definiert.
+- **Skizzen:** Die Skizzen unterscheideten sich vorallem in den Seiten die sie darstellen. In der Lektion wurde uns erlaubt anstatt eine Seite 8 mal zu zeichnen einfach verschiedene Seiten zu skizzieren. Es gab Varianten des Profils, des Gameplays, der Login Seite sowie auch der Highscore Seite. Alle Skizzen hatten einen ähnlichen Aufbau, da sie alle auf einem Desktop-Layout basieren sollten. Was vor allem aber nützlich war, war die Reflektion von meinen Mitschülern und mir, die mir geholfen haben die Skizzen zu verbessern.
+
+  Ausführliches Artefakt: **Crazy_8_Abgabe_soutorub.pdf** (siehe Abgabeordner)
 
 ### 3.3 Decide
-- **Gewählte Variante & Begründung:** Gewählt wurde ein Desktop-orientierter Aufbau mit klarer Navigation, weil damit der Spielablauf und die Auswertung am einfachsten verständlich dargestellt werden konnten. Bootstrap wurde verwendet, weil dies eine Vorgabe war und gleichzeitig eine schnelle, konsistente Umsetzung ermöglichte.
+- **Gewählte Variante & Begründung:** Gewählt wurde ein Desktop-orientierter Aufbau mit klarer Navigation, weil damit der Spielablauf und die Auswertung am einfachsten verständlich dargestellt werden konnten. Bootstrap wurde verwendet, weil dies eine schnelle, konsistente Umsetzung ermöglichte.
 - **End-to-End-Ablauf:** Nutzer registrieren sich oder loggen sich ein, wählen auf der Startseite Bildanzahl und Timer, spielen eine Runde, sehen den finalen Score und können anschliessend Profil oder globale Highscores einsehen.
 - **Mockup:** Das klickbare Mockup wurde in Figma als Wireframe erstellt und zeigte die wichtigsten Screens: Login, Sign up, Spielstart, Spielansicht, Highscores und Profil.
+
+  Für klickbares Mockup: Ausführliches Artefakt: **Figma_Prototype_Deadlock_Geoguesser.pdf** (siehe Abgabeordner) oder [Figma-Link](https://www.figma.com/design/YR2wRlvN1l2AVIeLazi4jZ/Deadlock-GeoGuesser---3-Screen-Workflow?node-id=0-1&p=f)
 
 ### 3.4 Prototype
 
@@ -71,14 +76,14 @@ Der Prototyp setzt auf eine dunkle, spielartige Oberfläche mit grünen Akzenten
   - **Profil:** Anzeige der Profildaten, Bearbeitung des Profils, gefilterte Scores pro Spielart
   - **Highscores:** gefiltertes Leaderboard mit Podest für die Top 3 und Tabelle für weitere Einträge
 - **Designentscheidungen:** 
-  - Grün/Schwarz als klare visuelle Richtung passend zum Game-Kontext
+  - Grün/Schwarz als klare visuelle Richtung passend zu Deadlock, da dort auch viel mit Grün und dunklen Farben gearbeitet wird
   - Bootstrap-Komponenten für Formulare, Buttons, Cards und Tabellen
-  - Profil nicht als eigener Navigationsbutton, sondern über den klickbaren User-Bereich
+  - Profil nicht als eigener Navigationsbutton, sondern über den klickbaren User-Bereich (standartmässig mit Avatar und Name) erreichbar. Das sollte eigentlich klar sein, da es auf vielen Plattformen so gelöst ist.
   - Filter für Bildanzahl und Timer separat, damit Statistiken und Highscores gezielt eingeschränkt werden können
 
 #### 3.4.2. Umsetzung (Technik)
 - **Technologie-Stack:** SvelteKit, TypeScript, Bootstrap 5, MongoDB Node Driver, MongoDB Atlas
-- **Tooling:** VS Code, Git/GitHub, Figma für das Mockup, Netlify für Deployment, MongoDB Atlas für die Datenbank
+- **Tooling:** IntellliJ IDEA als Code Editor, GitHub für Versionskontrolle, Figma für das Mockup, Netlify für Deployment, MongoDB Atlas für die Datenbank
 - **Struktur & Komponenten:** 
   - **Routen:** 
     - `src/routes/+page.svelte` für Login / Sign up
@@ -86,63 +91,48 @@ Der Prototyp setzt auf eine dunkle, spielartige Oberfläche mit grünen Akzenten
     - `src/routes/app/game/+page.svelte` für den Spielscreen
     - `src/routes/app/profile/+page.svelte` für Profil und gefilterte Scores
     - `src/routes/app/leaderboard/+page.svelte` für globale Highscores
-  - **Store:** `src/lib/stores/app-store.ts` verwaltet den Frontend-State und kommuniziert mit den API-Endpunkten
+  - **Store:** `src/lib/stores/app-store.ts` verwaltet den Frontend-State und kommuniziert mit den API-Endpunkten (wichtiges file für funktionalen Ablauf)
   - **Komponenten:** `AppShell`, `DeadlockMap`, `ModeBadge`, `Podium`
   - **Serverlogik:** `src/lib/server/db.ts` und `src/lib/server/mongodb.ts`
 - **Daten & Schnittstellen:** 
   - Daten liegen in MongoDB Atlas
-  - Collections: `users`, `pictures`, `scores`
+  - Collections: `users`, `pictures`, `scores` (siehe mehr Details in [mongodb-schema.md](./mongodb-schema.md))
   - `scores.userId` referenziert den jeweiligen User
-  - `scores.isTopThreeForUser` steuert, welche Einträge im globalen Leaderboard auftauchen
+  - `scores.isTopThreeForUser` steuert, welche Einträge im globalen Leaderboard auftauchen (maximal drei pro User)
   - API-Endpunkte für Login, Sign up, Profil-Update, zufällige Bilder, Score-Speicherung und Bootstrap-Daten
 - **Deployment:** Deployment über Netlify
 - **Besondere Entscheidungen:** 
   - Profilstatistiken werden aktuell dynamisch aus den gespeicherten Scores berechnet statt in einer separaten Stats-Collection gehalten
-  - Die Map bleibt statisch, nur die Zielkoordinaten der Bilder sind in der Datenbank gespeichert
+  - Die Map bleibt statisch, nur die Zielkoordinaten der Bilder sind in der Datenbank gespeichert. Auch die berechnung der Punkte erfolgt im Backend anhand der Distanz zwischen Guess und Zielkoordinaten. Die map selbst ist nicht interaktiv, sondern zeigt nur den Guess-Pin an der entsprechenden Stelle.
   - Das globale Leaderboard zeigt bewusst nicht beliebig viele Einträge pro User, sondern maximal die besten drei
 
 ### 3.5 Validate
-- **URL der getesteten Version:** [https://deadlockgeoguesser.netlify.app/app](https://deadlockgeoguesser.netlify.app/app)
-- **Ziele der Prüfung:** Überprüfen, ob der Hauptworkflow von Login bis gespeicherten Scores technisch und visuell funktioniert.
-- **Vorgehen:** Eigenes Testen während der Entwicklung sowie wiederholte technische Kontrolle nach Änderungen an Routing, MongoDB-Anbindung und Deployment.
-- **Stichprobe:** Kein formaler externer Usability-Test; Hauptfokus auf technischer Validierung und Workflow-Prüfung.
-- **Aufgaben/Szenarien:** 
-  - Nutzerkonto erstellen
-  - Einloggen
-  - Spielmodus wählen
-  - Runde starten und Guess abgeben
-  - Score im Profil prüfen
-  - Highscore-Liste nach Spielmodus filtern
-- **Kennzahlen & Beobachtungen:** 
-  - Lokale Typechecks wurden erfolgreich ausgeführt
-  - Deployment-Probleme traten vor allem bei MongoDB/Netlify und Atlas-IP-Freigaben auf
-  - Die Trennung zwischen Profil-Scores und globalem Leaderboard funktionierte wie geplant
-- **Zusammenfassung der Resultate:** Der Kernworkflow des Prototyps funktioniert. Besonders wichtig war die saubere Datenhaltung in MongoDB und die Regel, dass im globalen Leaderboard pro User nur die besten drei Scores erscheinen.
-- **Abgeleitete Verbesserungen:** 
-  - Robusteres Error Handling für Produktionsfehler
-  - Bessere Admin-Möglichkeit zum Verwalten von Bildern
-  - Echte Passwort-Hashes und sichereres Authentifizierungsmodell
-  - Optional später Tests mit realen Nutzern für Bedienbarkeit und Verständlichkeit
+#### URL der getesteten Version
+https://deadlockgeoguesser-old.netlify.app/app
 
-#### 3.5.1 Vorbereitung der Evaluation
+#### Ziele der Evaluation
+Ziel der Evaluation war es zu überprüfen, ob neue Benutzer die wichtigsten Funktionen der Anwendung ohne zusätzliche Erklärung verstehen und erfolgreich nutzen können. Dabei sollte insbesondere untersucht werden:
 
-Mit der Evaluation soll überprüft werden, ob die Hauptworkflows des Prototyps für Testpersonen verständlich und ohne grosse Hilfe nutzbar sind. Im Vordergrund stehen dabei der Einstieg über Login oder Sign up, das Konfigurieren und Starten einer Runde, das Setzen eines Guess auf der Map sowie das Auffinden von Profil und Highscores.
+- Ob Login und Registrierung verständlich sind
+- Ob das Erstellen und Starten einer Spielrunde intuitiv funktioniert
+- Ob das Platzieren und Bestätigen eines Guess auf der Map nachvollziehbar ist
+- Ob Nutzer ihre Resultate und Highscores problemlos finden können
+- Ob Navigations- oder Verständlichkeitsprobleme auftreten
 
-Die zentralen Fragestellungen beziehen sich darauf, ob der Spielablauf klar ist, ob Bildanzahl und Timer richtig verstanden werden, ob die Interaktion mit der Map selbsterklärend ist und ob die Unterscheidung zwischen eigenen Scores im Profil und globalen Scores im Leaderboard nachvollziehbar bleibt. Zusätzlich soll geprüft werden, ob die Filter für Bildanzahl und Timer sinnvoll wahrgenommen und korrekt verwendet werden.
+#### Vorgehen
+Die Evaluation wurde als moderierter Vor-Ort-Test (on-site) durchgeführt. Die Testpersonen erhielten nacheinander die vorbereiteten Aufgaben und sollten diese möglichst selbstständig lösen. Während der Durchführung wurden Beobachtungen notiert. Nach Abschluss aller Aufgaben wurden zusätzliche Abschlussfragen gestellt, um qualitative Rückmeldungen zur Bedienbarkeit und Verständlichkeit der Anwendung zu erhalten.
 
-Getestet werden sollen deshalb vor allem die Hauptszenarien des Prototyps: Account erstellen oder einloggen, Spielmodus wählen, Runde starten, Guess abgeben, Score im Profil wiederfinden und anschliessend die Highscores aufrufen und filtern. Diese Teile des Prototyps sind bereits vorhanden und interaktiv, sodass für die Evaluation keine wesentlichen Erweiterungen mehr nötig sind. Konkrete Beobachtungen und Antworten aus dem Test müssen im Nachhinein noch ergänzt werden.
+#### Stichprobe
+Die Evaluation wurde mit drei Testpersonen durchgeführt.
 
-#### 3.5.2 Durchführung der Evaluation
+Profil der Testpersonen:
+- 3Person ohne Vorkenntnisse zum Projekt
+- Alter zwischen 20 und 30 Jahren
 
-Die Evaluation wird an einem Notebook oder PC mit Internetzugang durchgeführt. Benötigt werden der deployte Prototyp, eine Maus oder ein Trackpad sowie ein Dokument oder Blatt für Notizen. Die Testaufgaben können schriftlich vorbereitet oder direkt am Bildschirm präsentiert werden. Wichtig ist, dass die Testpersonen pro Aufgabe nur die Zielvorgabe erhalten und den Weg durch den Prototyp möglichst selbstständig finden.
+Alle Testpersonen nutzten die Anwendung erstmals und erhielten vor Beginn keine Erklärung zur Bedienung.
 
-Die Testpersonen interagieren direkt mit dem Prototyp über Navigation, Formulareingaben, Buttons, Filter und den Guess auf der Map. Da der aktuelle Prototyp interaktiv ist, müssen Eingaben nicht zusätzlich gefaket werden. Nach dem Test sollten gezielte Rückfragen gestellt werden, zum Beispiel was sofort verständlich war, was unklar blieb, ob der Spielstart einfach war, ob die Map-Interaktion klar genug war und ob Profil sowie Highscores leicht gefunden wurden. Ausserdem sollte nach konkreten Verbesserungsvorschlägen gefragt werden.
-
-Die Erkenntnisse werden schriftlich festgehalten. Dazu gehören insbesondere beobachtete Unsicherheiten, falsche Klicks, Rückfragen, besonders gut funktionierende Stellen und konkrete Hinweise der Testpersonen. Die eigentlichen Resultate und Beobachtungen müssen nach der Durchführung der Tests noch eingetragen werden.
-
-#### 3.5.3 Testszenarien und Aufgaben
-
-Für die Evaluation werden vier kurze Testfälle vorbereitet. Jeder Testfall bildet einen zusammenhängenden Workflow ab und soll innerhalb von maximal zehn Minuten durchführbar sein. Nach jedem Testfall bleibt Platz, um das konkrete Feedback der Testperson zu notieren.
+- **Aufgaben/Szenarien:**
+  Für die Evaluation werden vier kurze Testfälle vorbereitet. Jeder Testfall bildet einen zusammenhängenden Workflow ab und soll innerhalb von maximal 3 Minuten durchführbar sein. Nach jedem Testfall bleibt Platz, um das konkrete Feedback der Testperson zu notieren.
 
 **Testfall 1: Einstieg und Account-Zugang**
 
@@ -192,7 +182,7 @@ Nach Abschluss der Aufgaben sollen allen Testpersonen die gleichen kurzen Fragen
   - Die Navigation war teilweise nicht sofort klar, vor allem wenn man zum ersten Mal zwischen Profil und Highscores wechseln wollte.
   - "Spiel starten" klingt etwas so, als würde das Spiel direkt ohne weitere Auswahl beginnen.
   - Der Unterschied zwischen den eigenen Scores im Profil und den globalen Highscores war anfangs nicht für alle sofort eindeutig.
-  
+
 - Welche Aufgabe war am einfachsten?
   - Login und Sign up waren einfach, weil die Eingaben übersichtlich aufgebaut sind.
   - Eine neue Runde zu erstellen war einfach, weil die Auswahl von Bildern und Timer direkt auf einer Seite erfolgt.
@@ -201,20 +191,38 @@ Nach Abschluss der Aufgaben sollen allen Testpersonen die gleichen kurzen Fragen
 - Bei welcher Aufgabe hattest du am meisten Unsicherheit?
   - Beim Spielen selbst fiel der Timer eher wenig auf, deshalb entstand kurz Unsicherheit über den Zeitdruck.
   - Beim ersten Guess auf der Map war nicht sofort klar, ob der Pin schon gespeichert ist oder erst noch bestätigt werden muss.
-  - Beim Filtern im Profil musste ich kurz überlegen, welche Auswahl die angezeigten Scores konkret verändert.
+  - Beim Filtern im Profil musste der Tester kurz überlegen, welche Auswahl die angezeigten Scores konkret verändert.
+
+#### Kennzahlen und Beobachtungen
+Erfolgsquote:
+
+- 3 von 3 Testpersonen konnten alle Aufgaben erfolgreich abschliessen
+- Es war keine Unterstützung durch den Moderator notwendig
+
+Qualitative Beobachtungen:
+
+- Die Erstellung einer neuen Runde wurde von allen Testpersonen schnell verstanden
+- Die Map wurde als intuitiv wahrgenommen und die Funktion zum Platzieren eines Guess war grundsätzlich verständlich
+- Profil und Highscore-Bereich konnten von allen Testpersonen gefunden werden
+- Der Unterschied zwischen persönlichen Scores und globalen Highscores war anfangs nicht für alle Testpersonen klar
+- Beim ersten Guess entstand teilweise Unsicherheit darüber, ob der gesetzte Marker bereits gespeichert wurde oder zusätzlich bestätigt werden muss
+- Der Timer wurde während des Spielens teilweise wenig wahrgenommen
+
+#### Zusammenfassung der Resultate
+Die Evaluation zeigt, dass die Kernfunktionen des Prototyps grundsätzlich verständlich und nutzbar sind. Alle Testpersonen konnten die vorgesehenen Aufgaben erfolgreich durchführen. Besonders positiv wurden die einfache Erstellung einer Spielrunde sowie die intuitive Nutzung der Map bewertet. Verbesserungspotenzial besteht vor allem bei der Navigation, der Sichtbarkeit des Timers sowie der klareren Kommunikation von Spielzuständen und Highscore-Konzepten.
+
+#### Abgeleitete Verbesserungen
+Priorisierte Verbesserungen aus der Evaluation:
+
+1. Klarere Navigation zwischen Profil und Highscores
+2. Deutlichere Kennzeichnung des Unterschieds zwischen persönlichen Scores und globalen Highscores
+3. Bessere visuelle Rückmeldung nach dem Setzen eines Guess
+4. Höhere Sichtbarkeit des Timers während einer Runde
+5. Überarbeitung einzelner Bezeichnungen, damit Funktionen und Abläufe für neue Nutzer noch verständlicher werden
 
 ## 4. Erweiterungen [Optional]
 
-### 4.1 MongoDB-Integration
-- **Beschreibung & Nutzen:** Nutzer, Bilder und Scores werden nicht nur lokal simuliert, sondern über MongoDB gespeichert. Das macht den Prototypen näher an einer echten Webapplikation.
-- **Wo umgesetzt:** 
-  - **Frontend:** Store-Kommunikation über API-Endpunkte
-  - **Backend:** MongoDB-Zugriff in `src/lib/server/db.ts`
-  - **Datenbank:** Collections `users`, `pictures`, `scores`
-- **Referenz:** beschrieben in Kapitel 3.4.2 und in [mongodb-schema.md](./mongodb-schema.md)
-- **Aus Evaluation abgeleitet?:** Nein, dies war Teil der technischen Zielsetzung
-
-### 4.2 Gefilterte Highscores und Profilscores
+### 4.1 Gefilterte Highscores und Profilscores
 - **Beschreibung & Nutzen:** Sowohl im Profil als auch in den globalen Highscores kann nach Bildanzahl und Timer gefiltert werden. Dadurch bleiben die Listen übersichtlich.
 - **Wo umgesetzt:** 
   - **Frontend:** Filterelemente und Tabellen auf Profil- und Highscore-Seite
@@ -222,7 +230,7 @@ Nach Abschluss der Aufgaben sollen allen Testpersonen die gleichen kurzen Fragen
 - **Referenz:** Kapitel 3.4.1 und 3.4.2
 - **Aus Evaluation abgeleitet?:** Teil der Designentscheidung für bessere Übersicht
 
-### 4.3 Begrenzung des globalen Leaderboards pro User
+### 4.2 Begrenzung des globalen Leaderboards pro User
 - **Beschreibung & Nutzen:** Im globalen Leaderboard werden pro User maximal die besten drei Scores angezeigt. Dadurch wird verhindert, dass ein einzelner User die gesamte Liste dominiert.
 - **Wo umgesetzt:** 
   - **Backend:** Flag `isTopThreeForUser` in der `scores`-Collection und Aktualisierung in `src/lib/server/db.ts`
@@ -230,9 +238,73 @@ Nach Abschluss der Aufgaben sollen allen Testpersonen die gleichen kurzen Fragen
 - **Referenz:** Kapitel 3.4.2 und [mongodb-schema.md](./mongodb-schema.md)
 - **Aus Evaluation abgeleitet?:** Nein, war funktionale Anforderung
 
+### 4.3 Distanzbasierte Punkteberechnung
+- **Beschreibung & Nutzen:** Die Punkte werden anhand der Distanz zwischen Guess und tatsächlicher Position berechnet. Dadurch entstehen abgestufte Resultate und nicht nur richtige oder falsche Antworten. Auch nahe Schätzungen werden entsprechend belohnt.
+- **Wo umgesetzt:**
+  - **Backend:** Berechnung der Distanz und des resultierenden Scores bei Spielabschluss
+- **Frontend:** Anzeige des berechneten Scores nach jeder Runde
+- **Referenz:** Kapitel 3.4.2
+- **Aus Evaluation abgeleitet?:** Nein, war Bestandteil des Spielkonzepts
+
+### 4.4 Wiederverwendbare Spielmodi
+- **Beschreibung & Nutzen:** Die Kombination aus Bildanzahl und Timer wird als eigener Spielmodus gespeichert. Dadurch können Resultate verschiedener Spielarten getrennt ausgewertet, gefiltert und fair miteinander verglichen werden.
+- **Wo umgesetzt:**
+  - **Backend:** Speicherung von `modeKey`, `roundCount` und `timerSeconds` in der `scores`-Collection
+- **Frontend:** Auswahl des Spielmodus sowie Filtermöglichkeiten in Profil und Highscores
+- **Referenz:** Kapitel 3.4.1 und 3.4.2
+- **Aus Evaluation abgeleitet?:** Nein, war funktionale Designentscheidung
+
+### 4.5 Trennung zwischen persönlichen und globalen Erfolgen
+- **Beschreibung & Nutzen:** Das System trennt bewusst zwischen persönlichen Scores im Profil und den globalen Highscores. Nutzer können dadurch sowohl ihre gesamte Spielhistorie betrachten als auch ihre besten Leistungen mit anderen vergleichen.
+- **Wo umgesetzt:**
+  - **Backend:** Separate Datenaufbereitung für Profilansicht und Leaderboard
+- **Frontend:** Eigenständige Profil- und Highscore-Seiten
+- **Referenz:** Kapitel 3.4.1 und 3.4.2
+- **Aus Evaluation abgeleitet?:** Teilweise, da der Unterschied von einigen Testpersonen zunächst nicht sofort erkannt wurde
+
+### 4.6 Zufällige Bildauswahl pro Runde
+- **Beschreibung & Nutzen:** Die Bilder werden für jede Runde zufällig aus der Datenbank ausgewählt. Dadurch unterscheiden sich die Spielrunden voneinander und die Wiederspielbarkeit des Prototyps wird erhöht.
+- **Wo umgesetzt:**
+  - **Backend:** Zufällige Auswahl der Bilder aus der `pictures`-Collection
+- **Frontend:** Automatische Anzeige der vom Backend gelieferten Bilder
+- **Referenz:** Kapitel 3.4.2 und [mongodb-schema.md](./mongodb-schema.md)
+- **Aus Evaluation abgeleitet?:** Nein, war Bestandteil des Spielkonzepts
+
+### 4.7 Zentraler App-Store für den gesamten Spielablauf
+- **Beschreibung & Nutzen:** Der zentrale `app-store.ts` verwaltet Login-Zustand, aktive Spielrunde, Profil-Scores, Leaderboard-Daten und Spielresultate an einer Stelle. Dadurch bleibt der Ablauf zwischen Login, Spielstart, Spielrunde, Score-Speicherung und Anzeige der Resultate konsistent.
+- **Wo umgesetzt:**
+  - **Frontend:** `src/lib/stores/app-store.ts` als zentraler State-Store mit `writable` und `derived` Stores
+  - **API-Kommunikation:** Der Store ruft die API-Endpunkte für Login, Signup, Bootstrap-Daten, Bilder, Profil-Updates und Scores auf
+- **Referenz:** Kapitel 3.4.2
+- **Aus Evaluation abgeleitet?:** Nein, war technische Architekturentscheidung
+
+### 4.8 Wiederherstellung der aktiven Session über LocalStorage
+- **Beschreibung & Nutzen:** Der aktive User wird im Browser gespeichert und beim erneuten Öffnen der App automatisch über den Server neu geladen. Dadurch bleibt der Nutzer nach einem Reload oder späteren Besuch weiterhin eingeloggt, ohne dass alle Profildaten dauerhaft im Browser gespeichert werden.
+- **Wo umgesetzt:**
+  - **Frontend:** Speicherung der User-ID unter `deadlock-geoguesser-active-user` im `localStorage`
+  - **Backend/API:** Laden der aktuellen Daten über `/api/bootstrap?userId=...`
+- **Referenz:** Kapitel 3.4.2
+- **Aus Evaluation abgeleitet?:** Nein, war Komfortfunktion für den Prototyp
+
+### 4.9 Abgestufte Score-Formel mit Falloff
+- **Beschreibung & Nutzen:** Die Punkteberechnung verwendet eine gewichtete Formel mit maximal 5000 Punkten pro Runde. Je näher der Guess an der echten Position liegt, desto mehr Punkte werden vergeben. Durch den Falloff werden sehr genaue Guesses stärker belohnt, während ungenaue Guesses schnell weniger Punkte erhalten.
+- **Wo umgesetzt:**
+  - **Frontend/Store:** Funktionen `squareDistanceBetween()` und `scoreFromSquareDistance()` in `src/lib/stores/app-store.ts`
+  - **Spielablauf:** Berechnung des Rundenscores beim Absenden eines Guess
+- **Referenz:** Kapitel 3.4.2
+- **Aus Evaluation abgeleitet?:** Nein, war Teil des Spielkonzepts
+
+### 4.10 Einheitliche Fehlerbehandlung für API-Anfragen
+- **Beschreibung & Nutzen:** API-Anfragen werden über eine gemeinsame Funktion `requestJson()` verarbeitet. Dadurch werden JSON-Antworten, Textantworten und Fehlermeldungen einheitlich behandelt. Das reduziert doppelten Code und sorgt dafür, dass Login-, Signup-, Profil- und Score-Fehler konsistent angezeigt werden können.
+- **Wo umgesetzt:**
+  - **Frontend/API-Kommunikation:** Funktion `requestJson()` in `src/lib/stores/app-store.ts`
+  - **Verwendet bei:** Login, Signup, Bootstrap, Profil-Update, Bildauswahl und Score-Speicherung
+- **Referenz:** Kapitel 3.4.2
+- **Aus Evaluation abgeleitet?:** Nein, war technische Qualitätsverbesserung
+
 ## 5. Projektorganisation [Optional]
 - **Repository & Struktur:** Das Projekt ist als SvelteKit-Repository organisiert mit klarer Trennung zwischen Routen, Komponenten, Store und Serverlogik.
-- **Issue-Management:** Es wurde kein formales externes Issue-Board verwendet; die Entwicklung erfolgte iterativ entlang der Anforderungen.
+- **Issue-Management:** Es wurde kein formales externes Issue-Board verwendet; die Entwicklung erfolgte iterativ entlang der Anforderungen und bei Bedarf mit neuen Ideen, die beim Programmierungsprozess gefunden wurden.
 - **Commit-Praxis:** Mehrere kleine Commits mit sprechenden Messages für Setup, State, Seiten und Dokumentation.
 
 ## 6. KI-Deklaration
@@ -240,14 +312,16 @@ Die folgende Deklaration beschreibt den Einsatz von KI im Projekt.
 
 ### 6.1 KI-Tools
 - **Eingesetzte Tools**: ChatGPT / Codex
-- **Zweck & Umfang**: KI wurde punktuell für Styling, technische Fehlersuche, Refactoring-Vorschläge, Unterstützung beim Netlify-Deployment sowie für erste Beispieldaten zur Befüllung der Datenbank verwendet. Der grundlegende Aufbau der Applikation, die Auswahl der Funktionen und die Zusammenstellung der Workflows wurden dabei eigenständig erarbeitet und anschliessend mit einzelnen KI-Vorschlägen verfeinert.
-- **Eigene Leistung (Abgrenzung):** Die Projektidee, die fachlichen Anforderungen, die Struktur der App (Grundgerüst), die Auswahl und Priorisierung der Funktionen sowie die inhaltlichen Entscheidungen zum Gameplay wurden selbst erarbeitet. Auch das Styling wurde manuell verfeinert. KI wurde vor allem als Unterstützung bei Problemlösungen, bei einzelnen technischen Verbesserungen und zur Überprüfung von Lösungsansätzen eingesetzt.
+- **Zweck & Umfang**: KI wurde punktuell für Styling verfeinerungen, technische Fehlersuche, Refactoring-Vorschläge verwendet. Code generation wurde vor allem für erstes styling sowie für das file "app-store.ts"  und seine integration projektweit genutzt. Alle generierten Vorschläge wurden anschliessend manuell überprüft, angepasst und in den Projektkontext integriert. 
+- **Eigene Leistung (Abgrenzung):** Die Projektidee, die fachlichen Anforderungen, die Struktur der App (Grundgerüst), die Auswahl, Priorisierung und schlussendliche Integration der Funktionen sowie die inhaltlichen Entscheidungen zum Gameplay wurden selbst erarbeitet. Auch das Styling wurde manuell verfeinert. Datenbankanbindung, html,  die verschiedenen Komponenten, Routes und Gamelogik wurden auch selbst erarbeitet. 
 
 ### 6.2 Prompt-Vorgehen
-Die KI wurde schrittweise und gezielt eingesetzt. Meist wurden konkrete Teilprobleme formuliert, zum Beispiel Fragen zum Styling, zur MongoDB-Anbindung, zu Fehlermeldungen im Deployment oder zu möglichen Refactorings. Anschliessend wurden die Vorschläge geprüft, ausgewählt und an den konkreten Projektkontext angepasst. Für die Dokumentation und die ersten Beispieldaten wurden ebenfalls gezielte Prompts verwendet.
+Die KI wurde schrittweise und gezielt eingesetzt. Meist wurden konkrete Teilprobleme formuliert, zum Beispiel Fragen zum Styling, zur MongoDB-Anbindung, zu Fehlermeldungen im Deployment oder zu möglichen Refactorings. Anschliessend wurden die Vorschläge geprüft, ausgewählt und an den konkreten Projektkontext angepasst. Für Dokumentation die das Projekt und code betrifft wurden auch zuerst Vorschläge benutzt da diese oft sehr hilfreich waren, um die Gedanken zu strukturieren und wichtige Punkte nicht zu vergessen. Die Prompts waren dabei immer mehrere sätze lang und beinhalteten viele Details damit alles stimmig bleibt.
 
 ### 6.3 Reflexion
-Der Einsatz von KI war vor allem bei technischen Detailfragen, beim Debugging und bei der Suche nach möglichen Lösungswegen hilfreich. Grenzen zeigten sich dort, wo projektspezifische Entscheidungen, fachliche Anforderungen und Deployment-Randbedingungen selbst beurteilt werden mussten. Deshalb war eine laufende eigene Überprüfung und Anpassung notwendig. KI diente in diesem Projekt als Unterstützung, nicht als Ersatz für die inhaltliche und technische Umsetzung.
+Der Einsatz von KI war vor allem bei technischen Detailfragen, beim Debugging, Refactoring und bei der Suche nach möglichen Lösungswegen hilfreich. Grenzen zeigten sich dort, wo projektspezifische Entscheidungen, fachliche Anforderungen und selbst beurteilt werden mussten. Deshalb war eine laufende eigene Überprüfung und Anpassung notwendig. KI diente in diesem Projekt als Unterstützung, nicht als Ersatz für die inhaltliche und technische Umsetzung. Was aufgefallen ist, ist dass KI bei styling und code keinen schönen Code schreibt und man oft den Code selbst "cleanen" muss, damit er in das Projekt passt. Es gab auch einige Vorschläge, die nicht so gut waren und verworfen wurden, dort wurde öfters viel Zeit eingebusst.
+Es gab aber auch viele gute Vorschläge, die mir geholfen haben weiterzukommen, vor allem bei der Erstellung des app-stores.
+
 
 ## 7. Anhang [Optional]
 - **Quellen:** 

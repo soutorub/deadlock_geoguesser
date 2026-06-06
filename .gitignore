@@ -4,6 +4,7 @@ build/
 dist/
 .idea/
 .vscode/
+.netlify/
 .DS_Store
 *.log
 .env
