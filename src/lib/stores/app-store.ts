@@ -13,8 +13,9 @@ import type {
 
 const STORAGE_KEY = 'deadlock-geoguesser-active-user';
 const MAP_SIZE = 100;
-const SCORE_BOX_RANGE = 10;
+const SCORE_BOX_RANGE = 25;
 const MAX_ROUND_SCORE = 5000;
+const SCORE_FALLOFF_POWER = 2.35;
 
 const defaultState: AppState = {
 	currentUser: null,
@@ -37,7 +38,8 @@ function scoreFromSquareDistance(distance: number) {
 	}
 
 	const normalized = 1 - distance / SCORE_BOX_RANGE;
-	return Math.max(0, Math.round(MAX_ROUND_SCORE * normalized));
+	const weighted = Math.pow(normalized, SCORE_FALLOFF_POWER);
+	return Math.max(0, Math.round(MAX_ROUND_SCORE * weighted));
 }
 
 function distanceBetween(left: Point, right: Point) {

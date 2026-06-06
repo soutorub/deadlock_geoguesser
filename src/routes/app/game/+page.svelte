@@ -22,7 +22,8 @@
 		}
 
 		const elapsed = Math.floor((Date.now() - $currentGame.roundStartedAt) / 1000);
-		remainingSeconds = Math.max(0, $currentGame.mode.timerSeconds - elapsed);
+		//remainingSeconds = Math.max(0, $currentGame.mode.timerSeconds - elapsed);
+		remainingSeconds = 1000
 	}
 
 	function restartInterval() {
@@ -95,7 +96,7 @@
 
 				<div class="game-copy-block">
 					<p class="app-eyebrow game-round-index">Bild {$currentGame.roundIndex + 1} / {$currentGame.images.length}</p>
-					<h2>Bild {$currentGame.roundIndex + 1}</h2>
+					<h2>Bild {$currentGame.roundIndex + 1} · {round.name}</h2>
 				</div>
 
 				<div class="art-frame">
@@ -111,7 +112,7 @@
 					</p>
 				</div>
 
-				<div class="game-map-wrap">
+				<div>
 					<DeadlockMap
 						selectedGuess={selectedGuess}
 						interactive
@@ -227,25 +228,11 @@
 		margin: 0;
 	}
 
-	.game-map-wrap {
-		display: grid;
-		width: 100%;
-		padding-inline: 0.15rem;
-	}
-
-	.game-pin-card {
-		padding: 1rem 1.1rem;
-	}
-
-	.game-pin-copy {
-		margin: 0;
-		font-size: 1rem;
-	}
-
-	.game-pin-empty,
-	.game-map-intro,
-	.game-finished-copy {
-		color: var(--app-color-text-muted);
+	.game-side-panel {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		gap: 1.35rem;
 	}
 
 	.game-action-group {
