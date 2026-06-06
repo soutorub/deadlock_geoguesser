@@ -70,38 +70,38 @@
 		</p>
 	</div>
 
-		{#if filteredScores.length}
-			<Podium scores={topThreeScores} />
+	{#if filteredScores.length}
+		<Podium scores={topThreeScores} />
 
-			<div class="app-table-wrap">
-				<table class="table leaderboard-table">
-					<thead>
+		<div class="app-table-wrap">
+			<table class="table leaderboard-table">
+				<thead>
+					<tr>
+						<th>Rang</th>
+						<th>Spieler</th>
+						<th>Modus</th>
+						<th>Score</th>
+						<th>Datum</th>
+					</tr>
+				</thead>
+				<tbody>
+					{#each filteredScores as score, index}
 						<tr>
-							<th>Rang</th>
-							<th>Spieler</th>
-							<th>Modus</th>
-							<th>Score</th>
-							<th>Datum</th>
+							<td>#{index + 1}</td>
+							<td>{score.username}</td>
+							<td>{score.roundCount} Bilder / {timerLabel(score.timerSeconds)}</td>
+							<td>{score.totalScore}</td>
+							<td>{new Date(score.playedAt).toLocaleDateString('de-CH')}</td>
 						</tr>
-					</thead>
-					<tbody>
-						{#each filteredScores as score, index}
-							<tr>
-								<td>#{index + 1}</td>
-								<td>{score.username}</td>
-								<td>{score.roundCount} Bilder / {timerLabel(score.timerSeconds)}</td>
-								<td>{score.totalScore}</td>
-								<td>{new Date(score.playedAt).toLocaleDateString('de-CH')}</td>
-							</tr>
-						{/each}
-					</tbody>
-				</table>
-			</div>
-		{:else}
-			<div class="app-stat-card leaderboard-empty-state">
-				Keine Highscore-Einträge für den ausgewählten Filter.
-			</div>
-		{/if}
+					{/each}
+				</tbody>
+			</table>
+		</div>
+	{:else}
+		<div class="app-stat-card leaderboard-empty-state">
+			Keine Highscore-Einträge für den ausgewählten Filter.
+		</div>
+	{/if}
 </section>
 
 <style>

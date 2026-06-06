@@ -31,7 +31,7 @@ Die Lösung ist eine SvelteKit-Webapplikation mit Bootstrap als UI-Grundlage. Na
 
 - **Kernfunktionalität:** Login und Sign up, Spielmodus wählen, Runde spielen, Score speichern, Profil anzeigen und bearbeiten, globale Highscores mit Filter.
 - **Annahmen [Optional]:** Die Nutzer verstehen den Spielablauf auch ohne komplexes Tutorial. Die statische Map reicht für einen Prototypen aus. Profile und Leaderboards sind motivierende Bestandteile des Spielkonzepts.
-- **Abgrenzung [Optional]:** Kein vollständiges Auth-System mit Sessions oder Rollen, keine echte Deadlock-Originalmap, keine produktionsreife Sicherheit, keine aufwändige Administration für Bilder oder Nutzer.
+- **Abgrenzung [Optional]:** Kein vollständiges Auth-System mit Sessions oder Rollen, keine interaktive Live-Map, keine produktionsreife Sicherheit, keine aufwändige Administration für Bilder oder Nutzer.
 
 ## 3. Vorgehen & Artefakte
 Die Umsetzung orientierte sich an einem phasenbasierten Vorgehen von Problemverständnis über Mockup bis zum funktionierenden Prototyp.
@@ -102,7 +102,7 @@ Der Prototyp setzt auf eine dunkle, spielartige Oberfläche mit grünen Akzenten
   - Das globale Leaderboard zeigt bewusst nicht beliebig viele Einträge pro User, sondern maximal die besten drei
 
 ### 3.5 Validate
-- **URL der getesteten Version** : [https://deadlockgeoguesser.netlify.app/app](https://deadlockgeoguesser.netlify.app/app)
+- **URL der getesteten Version:** [https://deadlockgeoguesser.netlify.app/app](https://deadlockgeoguesser.netlify.app/app)
 - **Ziele der Prüfung:** Überprüfen, ob der Hauptworkflow von Login bis gespeicherten Scores technisch und visuell funktioniert.
 - **Vorgehen:** Eigenes Testen während der Entwicklung sowie wiederholte technische Kontrolle nach Änderungen an Routing, MongoDB-Anbindung und Deployment.
 - **Stichprobe:** Kein formaler externer Usability-Test; Hauptfokus auf technischer Validierung und Workflow-Prüfung.
@@ -241,7 +241,7 @@ Die folgende Deklaration beschreibt den Einsatz von KI im Projekt.
 ### 6.1 KI-Tools
 - **Eingesetzte Tools**: ChatGPT / Codex
 - **Zweck & Umfang**: KI wurde punktuell für Styling, technische Fehlersuche, Refactoring-Vorschläge, Unterstützung beim Netlify-Deployment sowie für erste Beispieldaten zur Befüllung der Datenbank verwendet. Der grundlegende Aufbau der Applikation, die Auswahl der Funktionen und die Zusammenstellung der Workflows wurden dabei eigenständig erarbeitet und anschliessend mit einzelnen KI-Vorschlägen verfeinert.
-- **Eigene Leistung (Abgrenzung):** Die Projektidee, die fachlichen Anforderungen, die Struktur der App (Grundgerüst), die Auswahl und Priorisierung der Funktionen sowie die inhaltlichen Entscheidungen zum Gameplay wurden selbst erarbeitet. Auch wurde Styling manuel verfeinert. KI wurde vor allem als Unterstützung bei Problemlösungen, bei einzelnen technischen Verbesserungen und zur Überprüfung von Lösungsansätzen eingesetzt.
+- **Eigene Leistung (Abgrenzung):** Die Projektidee, die fachlichen Anforderungen, die Struktur der App (Grundgerüst), die Auswahl und Priorisierung der Funktionen sowie die inhaltlichen Entscheidungen zum Gameplay wurden selbst erarbeitet. Auch das Styling wurde manuell verfeinert. KI wurde vor allem als Unterstützung bei Problemlösungen, bei einzelnen technischen Verbesserungen und zur Überprüfung von Lösungsansätzen eingesetzt.
 
 ### 6.2 Prompt-Vorgehen
 Die KI wurde schrittweise und gezielt eingesetzt. Meist wurden konkrete Teilprobleme formuliert, zum Beispiel Fragen zum Styling, zur MongoDB-Anbindung, zu Fehlermeldungen im Deployment oder zu möglichen Refactorings. Anschliessend wurden die Vorschläge geprüft, ausgewählt und an den konkreten Projektkontext angepasst. Für die Dokumentation und die ersten Beispieldaten wurden ebenfalls gezielte Prompts verwendet.

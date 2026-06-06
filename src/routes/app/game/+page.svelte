@@ -22,8 +22,7 @@
 		}
 
 		const elapsed = Math.floor((Date.now() - $currentGame.roundStartedAt) / 1000);
-		//remainingSeconds = Math.max(0, $currentGame.mode.timerSeconds - elapsed);
-		remainingSeconds = 1000
+		remainingSeconds = Math.max(0, $currentGame.mode.timerSeconds - elapsed);
 	}
 
 	function restartInterval() {
@@ -96,7 +95,7 @@
 
 				<div class="game-copy-block">
 					<p class="app-eyebrow game-round-index">Bild {$currentGame.roundIndex + 1} / {$currentGame.images.length}</p>
-					<h2>Bild {$currentGame.roundIndex + 1} · {round.name}</h2>
+					<h2>Bild {$currentGame.roundIndex + 1}</h2>
 				</div>
 
 				<div class="art-frame">

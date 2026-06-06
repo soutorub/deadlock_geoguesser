@@ -4,8 +4,6 @@
 	import type { Point } from '$lib/types';
 
 	export let selectedGuess: Point | null = null;
-	export let actualPoint: Point | null = null;
-	export let revealActual = false;
 	export let interactive = true;
 	export let onGuess: ((point: Point) => void) | null = null;
 	export let mapImageUrl: string | null = '/deadlock_minimap.png';
@@ -43,9 +41,6 @@
 		{/if}
 		{#if selectedGuess}
 			<div class="marker guess" style={`left:${selectedGuess.x}%; top:${selectedGuess.y}%`}></div>
-		{/if}
-		{#if revealActual && actualPoint}
-			<div class="marker actual" style={`left:${actualPoint.x}%; top:${actualPoint.y}%`}></div>
 		{/if}
 	</button>
 </div>
@@ -90,9 +85,5 @@
 
 	.guess {
 		background: #f7b267;
-	}
-
-	.actual {
-		background: #52d3a4;
 	}
 </style>

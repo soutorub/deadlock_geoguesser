@@ -312,40 +312,6 @@ export async function getPictureDocumentById(pictureId: string) {
 	return pictures.findOne({ _id: new ObjectId(pictureId) });
 }
 
-export async function updatePicture(
-	pictureId: string,
-	payload: Partial<{
-		name: string;
-		actual: { x: number; y: number };
-	}>
-) {
-	const { pictures } = await getCollections();
-	const updateData: Record<string, unknown> = {
-		updatedAt: new Date()
-	};
-
-	if (typeof payload.name === 'string') {
-		updateData.name = payload.name;
-	}
-
-	if (payload.actual) {
-		updateData.actual = {
-			x: Math.max(0, Math.min(100, Number(payload.actual.x))),
-			y: Math.max(0, Math.min(100, Number(payload.actual.y)))
-		};
-	}
-
-	await pictures.updateOne(
-		{ _id: new ObjectId(pictureId) },
-		{
-			$set: updateData
-		}
-	);
-
-	const updated = await pictures.findOne({ _id: new ObjectId(pictureId) });
-	return updated ? toPictureRecord(updated) : null;
-}
-
 export async function buildBootstrap(userId: string): Promise<BootstrapPayload> {
 	const [currentUser, profileScores, leaderboardScores] = await Promise.all([
 		getUserById(userId),

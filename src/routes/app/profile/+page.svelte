@@ -151,13 +151,13 @@
 						</thead>
 						<tbody>
 							{#each filteredStats as entry}
-							<tr>
-								<td>{entry.count} Bilder / {labelForTimer(entry.timer)}</td>
-								<td>{entry.stats?.bestScore ?? 0}</td>
-								<td>{entry.stats?.lastScore ?? 0}</td>
-								<td>{entry.stats?.averageScore ?? 0}</td>
-								<td>{entry.stats?.gamesPlayed ?? 0}</td>
-							</tr>
+								<tr>
+									<td>{entry.count} Bilder / {labelForTimer(entry.timer)}</td>
+									<td>{entry.stats?.bestScore ?? 0}</td>
+									<td>{entry.stats?.lastScore ?? 0}</td>
+									<td>{entry.stats?.averageScore ?? 0}</td>
+									<td>{entry.stats?.gamesPlayed ?? 0}</td>
+								</tr>
 							{/each}
 						</tbody>
 					</table>
