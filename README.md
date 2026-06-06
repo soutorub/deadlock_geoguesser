@@ -47,7 +47,7 @@ Die Umsetzung orientierte sich an einem phasenbasierten Vorgehen von Problemvers
 
 ### 3.2 Sketch
 - **Variantenüberblick:** Es wurden früh einfache Skizzen für Login, Home, Spiel, Profil und Highscores definiert.
-- **Skizzen:** Die Skizzen unterscheideten sich vorallem in den Seiten die sie darstellen. In der Lektion wurde uns erlaubt anstatt eine Seite 8 mal zu zeichnen einfach verschiedene Seiten zu skizzieren. Es gab Varianten des Profils, des Gameplays, der Login Seite sowie auch der Highscore Seite. Alle Skizzen hatten einen ähnlichen Aufbau, da sie alle auf einem Desktop-Layout basieren sollten. Was vor allem aber nützlich war, war die Reflektion von meinen Mitschülern und mir, die mir geholfen haben die Skizzen zu verbessern.
+- **Skizzen:** Die Skizzen unterscheideten sich vor allem in den Seiten die sie darstellen. In der Lektion wurde uns erlaubt anstatt eine Seite 8 mal zu zeichnen einfach verschiedene Seiten zu skizzieren. Es gab Varianten des Profils, des Gameplays, der Login Seite sowie auch der Highscore Seite. Alle Skizzen hatten einen ähnlichen Aufbau, da sie alle auf einem Desktop-Layout basieren sollten. Was vor allem aber nützlich war, war die Reflektion von meinen Mitschülern und mir, die mir geholfen haben die Skizzen zu verbessern.
 
   Ausführliches Artefakt: **Crazy_8_Abgabe_soutorub.pdf** (siehe Abgabeordner)
 
@@ -78,12 +78,12 @@ Der Prototyp setzt auf eine dunkle, spielartige Oberfläche mit grünen Akzenten
 - **Designentscheidungen:** 
   - Grün/Schwarz als klare visuelle Richtung passend zu Deadlock, da dort auch viel mit Grün und dunklen Farben gearbeitet wird
   - Bootstrap-Komponenten für Formulare, Buttons, Cards und Tabellen
-  - Profil nicht als eigener Navigationsbutton, sondern über den klickbaren User-Bereich (standartmässig mit Avatar und Name) erreichbar. Das sollte eigentlich klar sein, da es auf vielen Plattformen so gelöst ist.
+  - Profil nicht als eigener Navigationsbutton, sondern über den klickbaren User-Bereich (standardmässig mit Avatar und Name) erreichbar. Das sollte eigentlich klar sein, da es auf vielen Plattformen so gelöst ist.
   - Filter für Bildanzahl und Timer separat, damit Statistiken und Highscores gezielt eingeschränkt werden können
 
 #### 3.4.2. Umsetzung (Technik)
 - **Technologie-Stack:** SvelteKit, TypeScript, Bootstrap 5, MongoDB Node Driver, MongoDB Atlas
-- **Tooling:** IntellliJ IDEA als Code Editor, GitHub für Versionskontrolle, Figma für das Mockup, Netlify für Deployment, MongoDB Atlas für die Datenbank
+- **Tooling:** IntelliJ IDEA als Code Editor, GitHub für Versionskontrolle, Figma für das Mockup, Netlify für Deployment, MongoDB Atlas für die Datenbank
 - **Struktur & Komponenten:** 
   - **Routen:** 
     - `src/routes/+page.svelte` für Login / Sign up
@@ -103,7 +103,7 @@ Der Prototyp setzt auf eine dunkle, spielartige Oberfläche mit grünen Akzenten
 - **Deployment:** Deployment über Netlify
 - **Besondere Entscheidungen:** 
   - Profilstatistiken werden aktuell dynamisch aus den gespeicherten Scores berechnet statt in einer separaten Stats-Collection gehalten
-  - Die Map bleibt statisch, nur die Zielkoordinaten der Bilder sind in der Datenbank gespeichert. Auch die berechnung der Punkte erfolgt im Backend anhand der Distanz zwischen Guess und Zielkoordinaten. Die map selbst ist nicht interaktiv, sondern zeigt nur den Guess-Pin an der entsprechenden Stelle.
+  - Die Map bleibt statisch, nur die Zielkoordinaten der Bilder sind in der Datenbank gespeichert. Die berechnung der Punkte erfolgt im Frontend anhand der Distanz zwischen Guess und Zielkoordinaten. Die map selbst ist nicht interaktiv, sondern zeigt nur den Guess-Pin an der entsprechenden Stelle.
   - Das globale Leaderboard zeigt bewusst nicht beliebig viele Einträge pro User, sondern maximal die besten drei
 
 ### 3.5 Validate
@@ -126,13 +126,13 @@ Die Evaluation wurde als moderierter Vor-Ort-Test (on-site) durchgeführt. Die T
 Die Evaluation wurde mit drei Testpersonen durchgeführt.
 
 Profil der Testpersonen:
-- 3Person ohne Vorkenntnisse zum Projekt
+- 3 Person ohne Vorkenntnisse zum Projekt
 - Alter zwischen 20 und 30 Jahren
 
 Alle Testpersonen nutzten die Anwendung erstmals und erhielten vor Beginn keine Erklärung zur Bedienung.
 
 - **Aufgaben/Szenarien:**
-  Für die Evaluation werden vier kurze Testfälle vorbereitet. Jeder Testfall bildet einen zusammenhängenden Workflow ab und soll innerhalb von maximal 3 Minuten durchführbar sein. Nach jedem Testfall bleibt Platz, um das konkrete Feedback der Testperson zu notieren.
+  Für die Evaluation wurden vier kurze Testfälle vorbereitet. Jeder Testfall bildet einen zusammenhängenden Workflow ab und soll innerhalb von maximal 3 Minuten durchführbar sein. Nach jedem Testfall bleibt Platz, um das konkrete Feedback der Testperson zu notieren.
 
 **Testfall 1: Einstieg und Account-Zugang**
 
@@ -286,15 +286,7 @@ Priorisierte Verbesserungen aus der Evaluation:
 - **Referenz:** Kapitel 3.4.2
 - **Aus Evaluation abgeleitet?:** Nein, war Komfortfunktion für den Prototyp
 
-### 4.9 Abgestufte Score-Formel mit Falloff
-- **Beschreibung & Nutzen:** Die Punkteberechnung verwendet eine gewichtete Formel mit maximal 5000 Punkten pro Runde. Je näher der Guess an der echten Position liegt, desto mehr Punkte werden vergeben. Durch den Falloff werden sehr genaue Guesses stärker belohnt, während ungenaue Guesses schnell weniger Punkte erhalten.
-- **Wo umgesetzt:**
-  - **Frontend/Store:** Funktionen `squareDistanceBetween()` und `scoreFromSquareDistance()` in `src/lib/stores/app-store.ts`
-  - **Spielablauf:** Berechnung des Rundenscores beim Absenden eines Guess
-- **Referenz:** Kapitel 3.4.2
-- **Aus Evaluation abgeleitet?:** Nein, war Teil des Spielkonzepts
-
-### 4.10 Einheitliche Fehlerbehandlung für API-Anfragen
+### 4.9 Einheitliche Fehlerbehandlung für API-Anfragen
 - **Beschreibung & Nutzen:** API-Anfragen werden über eine gemeinsame Funktion `requestJson()` verarbeitet. Dadurch werden JSON-Antworten, Textantworten und Fehlermeldungen einheitlich behandelt. Das reduziert doppelten Code und sorgt dafür, dass Login-, Signup-, Profil- und Score-Fehler konsistent angezeigt werden können.
 - **Wo umgesetzt:**
   - **Frontend/API-Kommunikation:** Funktion `requestJson()` in `src/lib/stores/app-store.ts`
